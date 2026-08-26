@@ -2166,6 +2166,7 @@ function App() {
               {'Privacy'}
             </Link>
             <span className="mx-2 text-border">|</span>
+            {/* identity-check:allow — deliberate upstream template attribution */}
             Design adapted from{' '}
             <a
               href="https://github.com/santifer/cv-santiago"
