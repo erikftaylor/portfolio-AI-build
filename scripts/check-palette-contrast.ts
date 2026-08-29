@@ -8,9 +8,7 @@
  * text — the hero gradient name link is 18px/600, below the large-text
  * threshold, so gradient endpoints are held to 4.5:1 too).
  *
- * Themes in ENFORCED fail the run (exit 1) on any failing pair; other
- * themes are report-only so the audit can't break the build on legacy
- * profiles that predate it.
+ * All palettes are enforced: any failing pair exits 1.
  *
  * Usage:  npx tsx scripts/check-palette-contrast.ts
  */
@@ -21,7 +19,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const CSS_PATH = resolve(__dirname, '../src/index.css')
 
-const ENFORCED = new Set(['minimalism', 'oasis', 'sorbet'])
+const ENFORCED = new Set(['cyber', 'warm', 'minimalism', 'oasis', 'sorbet', 'blueprint'])
 
 interface ThemeSpec {
   id: string
