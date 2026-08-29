@@ -30,7 +30,11 @@
     "diagnose:rag": "npx tsx scripts/diagnose-rag.ts",
     "palette:contrast": "npx tsx scripts/check-palette-contrast.ts",
     "identity:check": "npx tsx scripts/identity-check.ts",
-    "identity:check:strict": "npx tsx scripts/identity-check.ts --strict"
+    "identity:check:strict": "npx tsx scripts/identity-check.ts --strict",
+    "lab:new": "bash scripts/design-lab.sh new",
+    "lab:list": "bash scripts/design-lab.sh list",
+    "lab:status": "bash scripts/design-lab.sh status",
+    "lab:preview": "bash scripts/design-lab.sh preview"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
