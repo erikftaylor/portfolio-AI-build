@@ -39,6 +39,10 @@ interface I18nRepo {
 // skip — the script no-ops cleanly with an empty list.
 const I18N_REPOS: I18nRepo[] = []
 
+// Repos with `{/* hero-stats:owner/repo:stars */}` / `:forks` comment markers
+// in App.tsx. Leave empty to skip — the script no-ops cleanly with an empty list.
+const HERO_REPOS: I18nRepo[] = []
+
 function formatCount(n: number): string {
   if (n >= 1000) {
     const k = n / 1000
@@ -232,7 +236,8 @@ async function main() {
   let appTsx = readFileSync(APP_PATH, 'utf-8')
   let appChanged = false
 
-  for (const repo of [    const stats = await fetchGitHubStats(repo.owner, repo.repo)
+  for (const repo of HERO_REPOS) {
+    const stats = await fetchGitHubStats(repo.owner, repo.repo)
     if (!stats) continue
 
     const s = formatCount(stats.stars)
