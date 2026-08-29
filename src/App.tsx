@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useContext, useMemo, useReducer, useRef, createContext } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
-import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Bot, FolderGit2, Sparkles, FileText, SkipForward, ChevronRight, List, Download } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, FolderGit2, Sparkles, FileText, SkipForward, ChevronRight, List, Download } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import { site } from './site.config'
 import { useHomeSeo } from './articles/use-article-seo'
@@ -1457,44 +1457,6 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
               )
             })}
           </div>
-
-          {/* Burbujas de navegación - delays sincronizados */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.6, delay: typewriterComplete ? 0.9 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className={`flex flex-wrap justify-center gap-3 mt-10 mb-12 transition-opacity duration-[2500ms] ease-in-out ${textDimmed && !textRevealed ? 'opacity-15' : 'opacity-100'}`}
-          >
-          {t.story.nav.map((item) => {
-            const icons: Record<string, React.ReactNode> = {
-              briefcase: <Briefcase className="w-4 h-4" aria-hidden="true" />,
-              folder: <FolderGit2 className="w-4 h-4" aria-hidden="true" />,
-              mail: <Mail className="w-4 h-4" aria-hidden="true" />,
-              bot: <Bot className="w-4 h-4" aria-hidden="true" />
-            }
-            const isHighlight = 'highlight' in item && item.highlight
-            const handleClick = (e: React.MouseEvent) => {
-              if ((item.href as string) === '#chat') {
-                e.preventDefault()
-                window.dispatchEvent(new Event('openChat'))
-              }
-            }
-            return (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={handleClick}
-                className={isHighlight
-                  ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-gradient-fg border border-transparent hover:brightness-110 hover:shadow-xl hover:shadow-primary/30 active:brightness-95 transition-all duration-200 text-sm font-medium shadow-lg shadow-primary/25"
-                  : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
-                }
-              >
-                {icons[item.icon]}
-                {item.label}
-              </a>
-            )
-          })}
-          </motion.div>
         </motion.div>
       </div>
     </section>

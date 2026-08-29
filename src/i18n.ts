@@ -119,13 +119,6 @@ export const translations = {
         'Freelance right now, and open to the right full-time seat.',
         'Most interested in teams where AI is reshaping the design work itself.',
       ],
-      // "Ask about my work" nav entry removed while CHAT_ENABLED is false in
-      // main.tsx — add it back alongside re-enabling chat.
-      nav: [
-        { icon: 'briefcase', label: 'Experience', href: '#experience' },
-        { icon: 'folder', label: 'Work', href: '#work' },
-        { icon: 'mail', label: "Let's talk", href: '#contact' },
-      ],
       skills: ['Product Design', 'UX Research', 'Design Systems', 'AI-Integrated Workflows'],
       skipButton: 'Skip intro',
     },
