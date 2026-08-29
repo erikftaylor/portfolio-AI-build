@@ -17,10 +17,14 @@ function lerp(current: number, target: number, factor: number): number {
   return current + (target - current) * factor;
 }
 
-// CSS variable reader (cached per page load)
+// CSS variable reader — cached per theme/palette state (the root element's
+// class list changes on any palette or light/dark switch, invalidating it)
 let cachedColors: { from: string; to: string } | null = null;
+let cachedThemeKey = '';
 function getThemeColors(): { from: string; to: string } {
-  if (cachedColors) return cachedColors;
+  const themeKey = document.documentElement.className;
+  if (cachedColors && cachedThemeKey === themeKey) return cachedColors;
+  cachedThemeKey = themeKey;
   const style = getComputedStyle(document.documentElement);
   const from = style.getPropertyValue('--gradient-from').trim();
   const to = style.getPropertyValue('--gradient-to').trim();
