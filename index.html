@@ -139,7 +139,7 @@
          Palette ids/classes must stay in sync with PALETTES in GlobalNav.tsx;
          'blueprint' is dark-only so it forces dark. -->
     <script>
-      (function(){var s=localStorage.getItem('theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;var h=document.documentElement;var p=localStorage.getItem('palette');if(p==='warm')h.classList.add('theme-warm');else if(p==='blueprint'){h.classList.add('theme-blueprint');d=true}h.classList.toggle('dark',d);h.classList.toggle('light',!d);var m=document.querySelector('meta[name="color-scheme"]');if(m)m.content=d?'dark':'light';var t=document.querySelector('meta[name="theme-color"]');if(t)t.content=d?'#0a0a0a':'#ffffff'})()
+      (function(){var s=localStorage.getItem('theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;var h=document.documentElement;var p=localStorage.getItem('palette');var pc={warm:'theme-warm',minimalism:'theme-minimalism',oasis:'theme-oasis',sorbet:'theme-sorbet',blueprint:'theme-blueprint'};if(pc[p]){h.classList.add(pc[p]);if(p==='blueprint')d=true}h.classList.toggle('dark',d);h.classList.toggle('light',!d);var m=document.querySelector('meta[name="color-scheme"]');if(m)m.content=d?'dark':'light';var t=document.querySelector('meta[name="theme-color"]');if(t)t.content=d?'#0a0a0a':'#ffffff'})()
     </script>
   </head>
   <body>

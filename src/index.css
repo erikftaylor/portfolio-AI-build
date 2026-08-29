@@ -285,6 +285,199 @@ button, a, [role="button"], summary { cursor: pointer; }
     --linkedin: 210 88% 71%;
   }
 
+  /* ========== PROFILE: WARM MINIMALISM - Cream/Terracotta/Blush/Brown ==========
+     Source hexes: #FFF1E6 cream, #E07A5F terracotta, #F4A8A6 blush, #6F4E37 brown.
+     Text-role colors darkened (light) / kept bright (dark) for AA contrast. */
+  .theme-minimalism {
+    --background: 26 100% 95%;      /* warm cream #FFF1E6 */
+    --foreground: 25 40% 15%;       /* espresso — brown deepened for body text */
+    --muted: 26 60% 90%;
+    --muted-foreground: 25 30% 34%;
+    --primary: 13 60% 38%;          /* terracotta darkened for AA on cream */
+    --primary-foreground: 0 0% 100%;
+    --accent: 25 34% 33%;           /* deep brown #6F4E37 */
+    --accent-foreground: 26 100% 95%;
+    --border: 26 35% 82%;
+    --card: 30 100% 98%;
+    --card-foreground: 25 40% 15%;
+    --gradient-from: 13 62% 45%;    /* terracotta */
+    --gradient-to: 2 50% 48%;       /* blush deepened for gradient text */
+    --gold: 43 76% 38%;
+    --success: 142 72% 29%;
+    --tool: 13 60% 38%;
+    --linkedin: 210 91% 40%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .theme-minimalism:not(.light) {
+      --background: 25 20% 10%;
+      --foreground: 26 40% 90%;
+      --muted: 25 15% 15%;
+      --muted-foreground: 26 20% 65%;
+      --primary: 13 68% 63%;        /* muted terracotta #E07A5F */
+      --primary-foreground: 25 30% 8%;
+      --accent: 2 78% 80%;          /* blush pink #F4A8A6 */
+      --accent-foreground: 25 30% 8%;
+      --border: 25 12% 22%;
+      --card: 25 15% 13%;
+      --card-foreground: 26 40% 90%;
+      --gradient-from: 13 68% 63%;
+      --gradient-to: 2 78% 80%;
+      --gold: 45 97% 49%;
+      --success: 142 71% 45%;
+      --tool: 13 68% 63%;
+      --linkedin: 210 88% 71%;
+    }
+  }
+
+  .theme-minimalism.dark {
+    --background: 25 20% 10%;       /* deep espresso */
+    --foreground: 26 40% 90%;
+    --muted: 25 15% 15%;
+    --muted-foreground: 26 20% 65%;
+    --primary: 13 68% 63%;          /* muted terracotta #E07A5F */
+    --primary-foreground: 25 30% 8%;
+    --accent: 2 78% 80%;            /* blush pink #F4A8A6 */
+    --accent-foreground: 25 30% 8%;
+    --border: 25 12% 22%;
+    --card: 25 15% 13%;
+    --card-foreground: 26 40% 90%;
+    --gradient-from: 13 68% 63%;
+    --gradient-to: 2 78% 80%;
+    --gold: 45 97% 49%;
+    --success: 142 71% 45%;
+    --tool: 13 68% 63%;
+    --linkedin: 210 88% 71%;
+  }
+
+  /* ========== PROFILE: DIGITAL OASIS - Aqua/Coral/Beige/Clay ==========
+     Source hexes: #A8DADC aqua, #F4A261 coral, #F6E8C3 beige, #E76F51 clay. */
+  .theme-oasis {
+    --background: 182 45% 95%;      /* aqua-tinted white */
+    --foreground: 190 30% 12%;
+    --muted: 182 30% 87%;
+    --muted-foreground: 190 15% 33%;
+    --primary: 182 45% 28%;         /* aqua deepened to teal for AA */
+    --primary-foreground: 0 0% 100%;
+    --accent: 12 65% 40%;           /* warm clay darkened for AA */
+    --accent-foreground: 0 0% 100%;
+    --border: 182 25% 79%;
+    --card: 180 40% 98%;
+    --card-foreground: 190 30% 12%;
+    --gradient-from: 182 48% 33%;   /* teal */
+    --gradient-to: 12 72% 46%;      /* clay */
+    --gold: 43 76% 38%;
+    --success: 142 72% 29%;
+    --tool: 182 45% 28%;
+    --linkedin: 210 91% 40%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .theme-oasis:not(.light) {
+      --background: 190 25% 10%;
+      --foreground: 180 25% 90%;
+      --muted: 190 18% 15%;
+      --muted-foreground: 185 15% 62%;
+      --primary: 183 48% 66%;       /* soft aqua #A8DADC */
+      --primary-foreground: 190 30% 8%;
+      --accent: 27 87% 67%;         /* muted coral #F4A261 */
+      --accent-foreground: 20 30% 8%;
+      --border: 190 15% 22%;
+      --card: 190 20% 13%;
+      --card-foreground: 180 25% 90%;
+      --gradient-from: 183 55% 60%;
+      --gradient-to: 12 76% 61%;    /* warm clay #E76F51 */
+      --gold: 45 97% 49%;
+      --success: 142 71% 45%;
+      --tool: 183 48% 60%;
+      --linkedin: 210 88% 71%;
+    }
+  }
+
+  .theme-oasis.dark {
+    --background: 190 25% 10%;      /* deep lagoon */
+    --foreground: 180 25% 90%;
+    --muted: 190 18% 15%;
+    --muted-foreground: 185 15% 62%;
+    --primary: 183 48% 66%;         /* soft aqua #A8DADC */
+    --primary-foreground: 190 30% 8%;
+    --accent: 27 87% 67%;           /* muted coral #F4A261 */
+    --accent-foreground: 20 30% 8%;
+    --border: 190 15% 22%;
+    --card: 190 20% 13%;
+    --card-foreground: 180 25% 90%;
+    --gradient-from: 183 55% 60%;
+    --gradient-to: 12 76% 61%;      /* warm clay #E76F51 */
+    --gold: 45 97% 49%;
+    --success: 142 71% 45%;
+    --tool: 183 48% 60%;
+    --linkedin: 210 88% 71%;
+  }
+
+  /* ========== PROFILE: ELECTRIC SORBET - Electric Pink/Cyan on Cream ==========
+     Source hexes: #FF3D5A pink, #32DFFC cyan, cream ground. */
+  .theme-sorbet {
+    --background: 44 60% 93%;       /* poster cream */
+    --foreground: 30 10% 10%;
+    --muted: 44 40% 85%;
+    --muted-foreground: 30 8% 34%;
+    --primary: 351 80% 40%;         /* electric pink darkened for AA on cream */
+    --primary-foreground: 0 0% 100%;
+    --accent: 189 90% 27%;          /* electric cyan darkened for AA */
+    --accent-foreground: 0 0% 100%;
+    --border: 44 30% 77%;
+    --card: 44 50% 97%;
+    --card-foreground: 30 10% 10%;
+    --gradient-from: 351 85% 46%;
+    --gradient-to: 189 90% 32%;
+    --gold: 43 76% 38%;
+    --success: 142 72% 29%;
+    --tool: 189 90% 27%;
+    --linkedin: 210 91% 40%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .theme-sorbet:not(.light) {
+      --background: 255 15% 10%;
+      --foreground: 44 40% 92%;
+      --muted: 255 12% 15%;
+      --muted-foreground: 250 10% 65%;
+      --primary: 351 100% 66%;      /* #FF3D5A brightened */
+      --primary-foreground: 255 20% 8%;
+      --accent: 189 97% 59%;        /* #32DFFC */
+      --accent-foreground: 200 30% 8%;
+      --border: 255 10% 22%;
+      --card: 255 13% 13%;
+      --card-foreground: 44 40% 92%;
+      --gradient-from: 351 100% 62%;
+      --gradient-to: 189 97% 59%;
+      --gold: 45 97% 49%;
+      --success: 142 71% 45%;
+      --tool: 189 97% 59%;
+      --linkedin: 210 88% 71%;
+    }
+  }
+
+  .theme-sorbet.dark {
+    --background: 255 15% 10%;      /* midnight plum — the scarf's midpoint */
+    --foreground: 44 40% 92%;       /* cream text */
+    --muted: 255 12% 15%;
+    --muted-foreground: 250 10% 65%;
+    --primary: 351 100% 66%;        /* #FF3D5A brightened */
+    --primary-foreground: 255 20% 8%;
+    --accent: 189 97% 59%;          /* #32DFFC */
+    --accent-foreground: 200 30% 8%;
+    --border: 255 10% 22%;
+    --card: 255 13% 13%;
+    --card-foreground: 44 40% 92%;
+    --gradient-from: 351 100% 62%;
+    --gradient-to: 189 97% 59%;
+    --gold: 45 97% 49%;
+    --success: 142 71% 45%;
+    --tool: 189 97% 59%;
+    --linkedin: 210 88% 71%;
+  }
+
   /* ========== PROFILE: BLUEPRINT - Structural Lines ========== */
   /* Activate: document.documentElement.classList.toggle('theme-blueprint') */
   .theme-blueprint.dark {

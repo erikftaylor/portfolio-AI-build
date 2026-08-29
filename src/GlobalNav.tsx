@@ -90,6 +90,9 @@ function useLang() {
 const PALETTES = [
   { id: 'cyber', label: 'Cyber', className: null, darkOnly: false, swatch: ['#22c3dd', '#a855f7'] },
   { id: 'warm', label: 'Warm', className: 'theme-warm', darkOnly: false, swatch: ['#f97316', '#0d9488'] },
+  { id: 'minimalism', label: 'Warm Minimalism', className: 'theme-minimalism', darkOnly: false, swatch: ['#e07a5f', '#6f4e37'] },
+  { id: 'oasis', label: 'Digital Oasis', className: 'theme-oasis', darkOnly: false, swatch: ['#a8dadc', '#e76f51'] },
+  { id: 'sorbet', label: 'Electric Sorbet', className: 'theme-sorbet', darkOnly: false, swatch: ['#ff3d5a', '#32dffc'] },
   { id: 'blueprint', label: 'Blueprint', className: 'theme-blueprint', darkOnly: true, swatch: ['#00e0ff', '#27272a'] },
 ] as const
 type PaletteId = (typeof PALETTES)[number]['id']
@@ -203,7 +206,7 @@ function PaletteMenu({ palette, setPalette }: { palette: PaletteId; setPalette: 
         <div
           role="menu"
           aria-label="Color palettes"
-          className="absolute right-0 top-12 w-44 rounded-xl bg-card border border-border shadow-xl p-1.5 flex flex-col gap-0.5"
+          className="absolute right-0 top-12 w-52 rounded-xl bg-card border border-border shadow-xl p-1.5 flex flex-col gap-0.5"
           style={{ animation: 'nav-fade-in 0.2s ease-out' }}
         >
           {PALETTES.map(p => (
