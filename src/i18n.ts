@@ -223,7 +223,7 @@ export const translations = {
       items: [
         {
           title: 'JEM (Journey Experience Mapper)',
-          badge: 'Tovuti LMS · 8 weeks',
+          badge: 'Tovuti LMS',
           desc: 'Product teams were hand-synthesizing help docs, transcripts, and support tickets into journey maps — an estimated 10–15 hours per discovery cycle. I designed JEM — source ingestion, a guided AI scoping chat, an editable persona-by-stage canvas — defined its data model, and shipped it with Tovuti\'s lead engineer inside the eight-week window. Ten fixes shipped during the first week of internal use.',
           problem: 'Teams were hand-synthesizing help docs, transcripts, and support tickets into journey maps — an estimated 10–15 hours per discovery cycle.',
           approach: 'Designed JEM — source ingestion, a guided AI scoping chat, an editable persona-by-stage canvas — defined its data model, and shipped it with Tovuti\'s lead engineer in an eight-week window.',
