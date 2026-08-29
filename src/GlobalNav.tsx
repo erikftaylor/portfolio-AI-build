@@ -1,7 +1,7 @@
 import { site } from './site.config'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Sun, Moon, House, ChevronRight } from 'lucide-react'
+import { Sun, Moon, House, ChevronRight, Palette } from 'lucide-react'
 import { getPageTitles, getSectionLabels } from './articles/registry'
 
 /**
@@ -83,11 +83,48 @@ function useLang() {
   return { pathname, isHome, lang, pageTitle }
 }
 
+/** Color palettes defined as CSS profiles in index.css. Adding a new one:
+ *  write its variable block in index.css, then register it here — the
+ *  switcher and the boot script in index.html key off the `palette`
+ *  localStorage entry. `darkOnly` palettes force dark mode on selection. */
+const PALETTES = [
+  { id: 'cyber', label: 'Cyber', className: null, darkOnly: false, swatch: ['#22c3dd', '#a855f7'] },
+  { id: 'warm', label: 'Warm', className: 'theme-warm', darkOnly: false, swatch: ['#f97316', '#0d9488'] },
+  { id: 'minimalism', label: 'Warm Minimalism', className: 'theme-minimalism', darkOnly: false, swatch: ['#e07a5f', '#6f4e37'] },
+  { id: 'oasis', label: 'Digital Oasis', className: 'theme-oasis', darkOnly: false, swatch: ['#a8dadc', '#e76f51'] },
+  { id: 'sorbet', label: 'Electric Sorbet', className: 'theme-sorbet', darkOnly: false, swatch: ['#ff3d5a', '#32dffc'] },
+  { id: 'blueprint', label: 'Blueprint', className: 'theme-blueprint', darkOnly: true, swatch: ['#00e0ff', '#27272a'] },
+] as const
+type PaletteId = (typeof PALETTES)[number]['id']
+
+/** Disable all transitions, apply a class swap, re-enable after repaint —
+ *  keeps theme/palette switches instant with no half-transitioned frames. */
+function applyInstantly(apply: () => void) {
+  document.documentElement.style.setProperty('--theme-transition', 'none')
+  document.querySelectorAll('*').forEach(el => {
+    (el as HTMLElement).style.transition = 'none'
+  })
+
+  apply()
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.documentElement.style.removeProperty('--theme-transition')
+      document.querySelectorAll('*').forEach(el => {
+        (el as HTMLElement).style.transition = ''
+      })
+    })
+  })
+}
+
 function useTheme() {
   const [isDark, setIsDark] = useState(true)
+  const [palette, setPaletteState] = useState<PaletteId>('cyber')
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'))
+    const saved = localStorage.getItem('palette')
+    if (PALETTES.some(p => p.id === saved)) setPaletteState(saved as PaletteId)
   }, [])
 
   useEffect(() => {
@@ -103,35 +140,111 @@ function useTheme() {
   }, [])
 
   const toggleTheme = useCallback(() => {
-    // Kill all transitions for instant theme switch
-    document.documentElement.style.setProperty('--theme-transition', 'none')
-    document.querySelectorAll('*').forEach(el => {
-      (el as HTMLElement).style.transition = 'none'
-    })
-
-    const next = !isDark
-    setIsDark(next)
-    document.documentElement.classList.toggle('dark', next)
-    document.documentElement.classList.toggle('light', !next)
-    localStorage.setItem('theme', next ? 'dark' : 'light')
-
-    // Re-enable transitions after repaint
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document.documentElement.style.removeProperty('--theme-transition')
-        document.querySelectorAll('*').forEach(el => {
-          (el as HTMLElement).style.transition = ''
-        })
-      })
+    applyInstantly(() => {
+      const next = !isDark
+      setIsDark(next)
+      document.documentElement.classList.toggle('dark', next)
+      document.documentElement.classList.toggle('light', !next)
+      localStorage.setItem('theme', next ? 'dark' : 'light')
     })
   }, [isDark])
 
-  return { isDark, toggleTheme }
+  const setPalette = useCallback((id: PaletteId) => {
+    applyInstantly(() => {
+      const h = document.documentElement
+      const target = PALETTES.find(p => p.id === id)!
+      for (const p of PALETTES) {
+        if (p.className) h.classList.toggle(p.className, p.id === id)
+      }
+      localStorage.setItem('palette', id)
+      setPaletteState(id)
+      // Dark-only palettes (no light variables defined) force dark mode
+      if (target.darkOnly && !h.classList.contains('dark')) {
+        h.classList.add('dark')
+        h.classList.remove('light')
+        localStorage.setItem('theme', 'dark')
+        setIsDark(true)
+      }
+    })
+  }, [])
+
+  return { isDark, toggleTheme, palette, setPalette }
 }
 
-function NavControls({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: () => void }) {
+function PaletteMenu({ palette, setPalette }: { palette: PaletteId; setPalette: (id: PaletteId) => void }) {
+  const [open, setOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (e: PointerEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
+        aria-label="Switch color palette"
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <Palette className="w-5 h-5 text-primary" aria-hidden="true" />
+      </button>
+      {open && (
+        <div
+          role="menu"
+          aria-label="Color palettes"
+          className="absolute right-0 top-12 w-52 rounded-xl bg-card border border-border shadow-xl p-1.5 flex flex-col gap-0.5"
+          style={{ animation: 'nav-fade-in 0.2s ease-out' }}
+        >
+          {PALETTES.map(p => (
+            <button
+              key={p.id}
+              role="menuitemradio"
+              aria-checked={palette === p.id}
+              onClick={() => { setPalette(p.id); setOpen(false) }}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-left transition-colors ${
+                palette === p.id
+                  ? 'bg-primary/10 text-foreground font-medium'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              <span className="flex -space-x-1" aria-hidden="true">
+                {p.swatch.map(c => (
+                  <span key={c} className="w-3.5 h-3.5 rounded-full border border-border" style={{ backgroundColor: c }} />
+                ))}
+              </span>
+              {p.label}
+              {p.darkOnly && <span className="ml-auto text-xs opacity-60">dark</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function NavControls({ isDark, toggleTheme, palette, setPalette }: {
+  isDark: boolean
+  toggleTheme: () => void
+  palette: PaletteId
+  setPalette: (id: PaletteId) => void
+}) {
   return (
     <div className="flex items-center gap-2">
+      <PaletteMenu palette={palette} setPalette={setPalette} />
       <button
         onClick={toggleTheme}
         className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
@@ -145,7 +258,7 @@ function NavControls({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: ()
 
 export default function GlobalNav() {
   const { pathname, isHome, pageTitle } = useLang()
-  const { isDark, toggleTheme } = useTheme()
+  const { isDark, toggleTheme, palette, setPalette } = useTheme()
   const activeSection = useActiveSection(pathname, !isHome)
 
   const hasBar = !isHome
@@ -167,7 +280,7 @@ export default function GlobalNav() {
   const animateBackLink = !isHome && !backLinkShown.current
   if (!isHome) backLinkShown.current = true
 
-  const controls = <NavControls isDark={isDark} toggleTheme={toggleTheme} />
+  const controls = <NavControls isDark={isDark} toggleTheme={toggleTheme} palette={palette} setPalette={setPalette} />
 
   const fade = (duration: string) => ({ animation: `nav-fade-in ${duration} ease-out` })
 
