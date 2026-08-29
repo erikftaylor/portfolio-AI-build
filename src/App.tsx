@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useContext, useMemo, useReducer, useRef, createContext } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
-import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Bot, FolderGit2, Sparkles, FileText, SkipForward, ChevronRight, List } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Bot, FolderGit2, Sparkles, FileText, SkipForward, ChevronRight, List, Download } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import { site } from './site.config'
 import { useHomeSeo } from './articles/use-article-seo'
@@ -1826,6 +1826,14 @@ function App() {
               </div>
               {t.experience.title}
             </h2>
+            <a
+              href="/resume-erik-taylor.pdf"
+              download="Resume-ErikTaylor.pdf"
+              className="group/cta inline-flex items-center gap-2 mb-8 px-5 py-2.5 rounded-full border border-border hover:border-primary/50 transition-colors duration-200 hover:bg-primary/5 text-sm font-medium"
+            >
+              <Download className="w-4 h-4 transition-transform duration-200 ease-out group-hover/cta:translate-y-0.5 motion-reduce:group-hover/cta:translate-y-0" aria-hidden="true" />
+              Download resume
+            </a>
           </AnimatedSection>
 
           <div className="space-y-8">
