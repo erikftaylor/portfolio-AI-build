@@ -588,7 +588,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
               transition={{ duration: 0.2 }}
               className="w-full h-full rounded-full bg-gradient-theme flex items-center justify-center"
             >
-              <X className="w-6 h-6 text-white" aria-hidden="true" />
+              <X className="w-6 h-6 text-gradient-fg" aria-hidden="true" />
             </motion.div>
           ) : (
             <motion.div
@@ -743,7 +743,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                           <div
                             className={`px-4 py-2.5 rounded-2xl leading-relaxed ${
                               message.role === 'user'
-                                ? 'bg-gradient-theme text-white rounded-br-md'
+                                ? 'bg-gradient-theme text-gradient-fg rounded-br-md'
                                 : 'bg-muted text-foreground rounded-bl-md'
                             } ${isMobile ? 'text-base' : 'text-sm'} ${
                               isStreaming && i === messages.length - 1 && message.role === 'assistant'
@@ -878,7 +878,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                         </p>
                         <a
                           href={`mailto:${translations[lang].email}`}
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme-r text-white text-sm font-medium hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme-r text-gradient-fg text-sm font-medium hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
                         >
                           <Mail className="w-4 h-4" aria-hidden="true" />
                           {translations[lang].email}
@@ -1017,7 +1017,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                     onClick={() => sendMessage()}
                     disabled={isLoading || !input.trim()}
                     aria-label={lang === 'en' ? 'Send message' : 'Enviar mensaje'}
-                    className={`rounded-xl bg-gradient-theme flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed transition-opacity ${
+                    className={`rounded-xl bg-gradient-theme flex items-center justify-center text-gradient-fg disabled:opacity-50 disabled:cursor-not-allowed transition-opacity ${
                       isMobile ? 'w-12 h-12' : 'w-10 h-10'
                     }`}
                   >

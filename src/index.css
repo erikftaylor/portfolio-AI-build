@@ -110,6 +110,10 @@ button, a, [role="button"], summary { cursor: pointer; }
     /* Gradient colors for chat/buttons */
     --gradient-from: 187 86% 29%; /* cyan-700 — darkened from cyan-400 for AA text contrast on light bg */
     --gradient-to: 270 91% 59%;   /* purple-500, darkened slightly for AA text contrast on light bg */
+    /* Text color for content sitting ON the gradient (chat bubbles, CTAs).
+       White by default; themes whose dark-mode gradients are bright override
+       with a dark ink so text on gradient stays AA-compliant. */
+    --gradient-fg: 0 0% 100%;
     /* Semantic accent colors */
     --gold: 43 76% 38%;
     --success: 142 72% 29%;
@@ -302,8 +306,8 @@ button, a, [role="button"], summary { cursor: pointer; }
     --card-foreground: 25 40% 15%;
     --gradient-from: 13 62% 45%;    /* terracotta */
     --gradient-to: 2 50% 48%;       /* blush deepened for gradient text */
-    --gold: 43 76% 38%;
-    --success: 142 72% 29%;
+    --gold: 43 76% 28%;             /* darkened for AA on cream */
+    --success: 142 72% 27%;
     --tool: 13 60% 38%;
     --linkedin: 210 91% 40%;
   }
@@ -323,6 +327,7 @@ button, a, [role="button"], summary { cursor: pointer; }
       --card-foreground: 26 40% 90%;
       --gradient-from: 13 68% 63%;
       --gradient-to: 2 78% 80%;
+      --gradient-fg: 25 30% 8%;
       --gold: 45 97% 49%;
       --success: 142 71% 45%;
       --tool: 13 68% 63%;
@@ -344,6 +349,7 @@ button, a, [role="button"], summary { cursor: pointer; }
     --card-foreground: 26 40% 90%;
     --gradient-from: 13 68% 63%;
     --gradient-to: 2 78% 80%;
+    --gradient-fg: 25 30% 8%;       /* dark ink — dark-mode gradient is bright */
     --gold: 45 97% 49%;
     --success: 142 71% 45%;
     --tool: 13 68% 63%;
@@ -365,9 +371,9 @@ button, a, [role="button"], summary { cursor: pointer; }
     --card: 180 40% 98%;
     --card-foreground: 190 30% 12%;
     --gradient-from: 182 48% 33%;   /* teal */
-    --gradient-to: 12 72% 46%;      /* clay */
-    --gold: 43 76% 38%;
-    --success: 142 72% 29%;
+    --gradient-to: 12 72% 42%;      /* clay, darkened for AA on light bg */
+    --gold: 43 76% 28%;             /* darkened for AA on light bg */
+    --success: 142 72% 27%;
     --tool: 182 45% 28%;
     --linkedin: 210 91% 40%;
   }
@@ -387,6 +393,7 @@ button, a, [role="button"], summary { cursor: pointer; }
       --card-foreground: 180 25% 90%;
       --gradient-from: 183 55% 60%;
       --gradient-to: 12 76% 61%;    /* warm clay #E76F51 */
+      --gradient-fg: 190 30% 8%;
       --gold: 45 97% 49%;
       --success: 142 71% 45%;
       --tool: 183 48% 60%;
@@ -408,6 +415,7 @@ button, a, [role="button"], summary { cursor: pointer; }
     --card-foreground: 180 25% 90%;
     --gradient-from: 183 55% 60%;
     --gradient-to: 12 76% 61%;      /* warm clay #E76F51 */
+    --gradient-fg: 190 30% 8%;      /* dark ink — dark-mode gradient is bright */
     --gold: 45 97% 49%;
     --success: 142 71% 45%;
     --tool: 183 48% 60%;
@@ -428,10 +436,10 @@ button, a, [role="button"], summary { cursor: pointer; }
     --border: 44 30% 77%;
     --card: 44 50% 97%;
     --card-foreground: 30 10% 10%;
-    --gradient-from: 351 85% 46%;
-    --gradient-to: 189 90% 32%;
-    --gold: 43 76% 38%;
-    --success: 142 72% 29%;
+    --gradient-from: 351 85% 44%;
+    --gradient-to: 189 90% 28%;     /* darkened for AA on cream */
+    --gold: 43 76% 28%;             /* darkened for AA on cream */
+    --success: 142 72% 26%;
     --tool: 189 90% 27%;
     --linkedin: 210 91% 40%;
   }
@@ -451,6 +459,7 @@ button, a, [role="button"], summary { cursor: pointer; }
       --card-foreground: 44 40% 92%;
       --gradient-from: 351 100% 62%;
       --gradient-to: 189 97% 59%;
+      --gradient-fg: 255 20% 8%;
       --gold: 45 97% 49%;
       --success: 142 71% 45%;
       --tool: 189 97% 59%;
@@ -472,6 +481,7 @@ button, a, [role="button"], summary { cursor: pointer; }
     --card-foreground: 44 40% 92%;
     --gradient-from: 351 100% 62%;
     --gradient-to: 189 97% 59%;
+    --gradient-fg: 255 20% 8%;      /* dark ink — dark-mode gradient is bright */
     --gold: 45 97% 49%;
     --success: 142 71% 45%;
     --tool: 189 97% 59%;
@@ -673,6 +683,7 @@ button, a, [role="button"], summary { cursor: pointer; }
   }
   .from-gradient { --tw-gradient-from: hsl(var(--gradient-from)); }
   .to-gradient { --tw-gradient-to: hsl(var(--gradient-to)); }
+  .text-gradient-fg { color: hsl(var(--gradient-fg)); }
   .text-gradient-theme {
     background-image: linear-gradient(to right, hsl(var(--gradient-from)), hsl(var(--gradient-to)));
     -webkit-background-clip: text;
