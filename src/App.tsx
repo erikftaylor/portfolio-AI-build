@@ -1485,7 +1485,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
                 href={item.href}
                 onClick={handleClick}
                 className={isHighlight
-                  ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-white border border-transparent hover:brightness-110 hover:shadow-xl hover:shadow-primary/30 active:brightness-95 transition-all duration-200 text-sm font-medium shadow-lg shadow-primary/25"
+                  ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-gradient-fg border border-transparent hover:brightness-110 hover:shadow-xl hover:shadow-primary/30 active:brightness-95 transition-all duration-200 text-sm font-medium shadow-lg shadow-primary/25"
                   : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
                 }
               >
