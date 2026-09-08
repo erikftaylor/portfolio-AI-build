@@ -31,25 +31,25 @@
 **Interfaces:**
 - Produces: `AI_PATHS`, `RATE_LIMIT_POLICIES`, `isAiEnabled(env)`, `rateLimitPolicy(request)`, `hashClientKey(request, salt)`, `securityUnavailable()`, `rateLimited(result)`, `withRateLimitHeaders(response, result)`, and `applySecurityHeaders(request, response)`.
 
-- [ ] **Step 1: Write failing policy tests**
+- [x] **Step 1: Write failing policy tests**
 
 Cover exact-true AI enablement, endpoint/method policy selection, deterministic privacy-preserving client hashing, JSON `503`/`429` responses, rate-limit response headers, CSP presence, HTML `no-cache`, ops `no-store`, and immutable hashed-asset/font caching.
 
-- [ ] **Step 2: Verify the tests fail because the module does not exist**
+- [x] **Step 2: Verify the tests fail because the module does not exist**
 
 Run: `node --test tests/p0-runtime-security.test.mjs`
 
-- [ ] **Step 3: Implement the pure policy module**
+- [x] **Step 3: Implement the pure policy module**
 
 Use Web-standard `Request`, `Response`, `Headers`, `TextEncoder`, and
 `crypto.subtle`. Do not import Cloudflare-only packages.
 
-- [ ] **Step 4: Add a local test command and verify green**
+- [x] **Step 4: Add a local test command and verify green**
 
 Add `"test:p0": "node --test tests/p0-*.test.mjs"` and run both the direct
 test and `npm run test:p0`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Commit message: `feat: add runtime security policy`
 
