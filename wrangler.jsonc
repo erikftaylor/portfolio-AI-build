@@ -8,8 +8,19 @@
     "directory": "./dist",
     "not_found_handling": "single-page-application",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": true
   },
+  "vars": {
+    "AI_FEATURES_ENABLED": "false"
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "RATE_LIMITER", "class_name": "RateLimiter" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["RateLimiter"] }
+  ],
   "rules": [
     { "type": "Text", "globs": ["**/*.txt"], "fallthrough": true }
   ],
@@ -22,7 +33,15 @@
   // `npm run worker:deploy` to promote the same build to production.
   "env": {
     "staging": {
-      "name": "portfolio-site-staging"
+      "name": "portfolio-site-staging",
+      "vars": {
+        "AI_FEATURES_ENABLED": "false"
+      },
+      "durable_objects": {
+        "bindings": [
+          { "name": "RATE_LIMITER", "class_name": "RateLimiter" }
+        ]
+      }
     }
   }
 }

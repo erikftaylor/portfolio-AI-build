@@ -66,32 +66,33 @@ Commit message: `feat: add runtime security policy`
   `RateLimiter` Durable Object class whose `fetch()` accepts JSON
   `{ key, policy, nowMs? }` and returns `{ allowed, limit, remaining, resetAt }`.
 
-- [ ] **Step 1: Write failing counter tests**
+- [x] **Step 1: Write failing counter tests**
 
 Exercise first consumption, last allowed request, rejection, reset after the
 window, independent keys, and malformed requests.
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `node --test tests/p0-rate-limiter.test.mjs`
 
-- [ ] **Step 3: Implement the storage-agnostic counter and DO adapter**
+- [x] **Step 3: Implement the storage-agnostic counter and DO adapter**
 
 The counter writes the next `{ count, resetAt }` before returning and relies on
 Durable Object serialization for atomicity. Malformed adapter input returns
 `400` without touching storage.
 
-- [ ] **Step 4: Configure the binding and migration**
+- [x] **Step 4: Configure the binding and migration**
 
 Set `assets.run_worker_first` to `true`; add `RATE_LIMITER` bindings for default
 and staging environments; add a SQLite Durable Object migration; set
 `AI_FEATURES_ENABLED` to `"false"` in both environments.
 
-- [ ] **Step 5: Verify tests and Wrangler configuration**
+- [x] **Step 5: Verify tests**
 
-Run: `npm run test:p0` and `./node_modules/.bin/wrangler deploy --dry-run --outdir /tmp/portfolio-p0-worker`.
+Run: `npm run test:p0`. The Wrangler dry run occurs in Task 3 after the
+entrypoint exports the Durable Object class.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 Commit message: `feat: add atomic worker rate limiter`
 
@@ -131,9 +132,11 @@ store or log the raw value.
 Keep `worker/index.js` declarative: import handlers, create the app, export it,
 and re-export the Durable Object class.
 
-- [ ] **Step 5: Verify green and commit**
+- [ ] **Step 5: Verify green, verify the Worker bundle, and commit**
 
-Run `npm run test:p0`, then commit as `feat: protect worker routes and assets`.
+Run `npm run test:p0` and
+`./node_modules/.bin/wrangler deploy --dry-run --env="" --outdir /tmp/portfolio-p0-worker`,
+then commit as `feat: protect worker routes and assets`.
 
 ### Task 4: Signed ops session backend
 
