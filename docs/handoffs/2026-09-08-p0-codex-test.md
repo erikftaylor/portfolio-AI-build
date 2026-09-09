@@ -90,6 +90,25 @@ Final verification on 2026-09-08:
 - Browser source scan for `ops_token` or bearer authorization — no matches.
 - `git diff --check` — passed.
 
+A local Wrangler smoke test was also completed with throwaway credentials. Ten
+end-to-end checks passed against the real Worker runtime:
+
+- HTML delivery with CSP and `no-cache`.
+- Immutable caching for a built, hashed asset.
+- Server-side AI shutdown before the paid handler.
+- Secured JSON handling for an unknown API route.
+- Rejection of an unauthenticated protected ops request.
+- Generic rejection and rate-limit metadata for a wrong ops password.
+- Successful exchange for a signed `HttpOnly` session cookie with no token in
+  the response body.
+- Successful session-status request using that cookie.
+- `429 Too Many Requests` with retry metadata after repeated login attempts.
+- Logout response clearing the browser cookie.
+
+The Worker request log contained the expected statuses and no runtime errors.
+The local server was stopped after the test, and `npm run test:p0` was green
+again afterward.
+
 The repository-wide `npm run lint` still reports pre-existing findings outside
 this P0 change. The targeted lint command below is the clean signal for this
 branch.
