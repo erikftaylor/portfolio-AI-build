@@ -247,29 +247,29 @@ Commit message: `feat: use secure ops cookie sessions`
 - Documents: `AI_FEATURES_ENABLED`, `RATE_LIMIT_SALT`,
   `OPS_DASHBOARD_SECRET`, `OPS_SESSION_SECRET`, and `RATE_LIMITER` behavior.
 
-- [ ] **Step 1: Add safe configuration examples**
+- [x] **Step 1: Add safe configuration examples**
 
 Add `!.dev.vars.example` after the existing `.dev.vars.*` ignore. Examples
 contain obvious non-secret placeholders and keep AI disabled by default.
 Explain that real secrets belong in `.dev.vars` locally and Wrangler secrets
 in production.
 
-- [ ] **Step 2: Write the tracked handoff**
+- [x] **Step 2: Write the tracked handoff**
 
 Record branch, commits, architecture, changed files, test commands with exact
 results, unresolved items, deployment requirements, and the next safe action.
 
-- [ ] **Step 3: Update the local Claude Code entry point**
+- [x] **Step 3: Update the local Claude Code entry point**
 
 Append a dated P0 section to the ignored `CLAUDE.md` pointing to the spec,
 plan, and handoff. Do not replace existing project guidance.
 
-- [ ] **Step 4: Run final verification**
+- [x] **Step 4: Run final verification**
 
 Run `npm run test:p0`, `./node_modules/.bin/tsc -b`,
 `./node_modules/.bin/vite build`, targeted ESLint on all changed JS/TS/TSX
 files, `git diff --check`, and `git status --short`.
 
-- [ ] **Step 5: Commit tracked documentation**
+- [x] **Step 5: Commit tracked documentation**
 
 Commit message: `docs: hand off P0 runtime security work`
