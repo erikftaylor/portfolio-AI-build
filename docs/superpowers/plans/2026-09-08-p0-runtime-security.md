@@ -158,34 +158,34 @@ then commit as `feat: protect worker routes and assets`.
   `validateOpsAuth(request)`.
 - Auth handler supports `GET` session status, `POST` login, and `DELETE` logout.
 
-- [ ] **Step 1: Write failing authentication tests**
+- [x] **Step 1: Write failing authentication tests**
 
 Cover valid, tampered, expired, and missing sessions; cookie flags on HTTPS and
 localhost HTTP; constant-time comparison outcomes; generic failed login; login
 without configuration; successful login without a returned token; session
 status; and logout expiration.
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `node --test tests/p0-ops-auth.test.mjs`
 
-- [ ] **Step 3: Implement Web Crypto session helpers**
+- [x] **Step 3: Implement Web Crypto session helpers**
 
 Use HMAC-SHA-256 over a base64url JSON payload containing only `iat`, `exp`,
 and `sid`. Validate payload shape and a 30-minute expiry. Never use
 `OPS_DASHBOARD_SECRET` as the signing key.
 
-- [ ] **Step 4: Implement GET/POST/DELETE auth behavior**
+- [x] **Step 4: Implement GET/POST/DELETE auth behavior**
 
 Read `OPS_DASHBOARD_SECRET` and `OPS_SESSION_SECRET` from the Worker process
 environment. Successful POST returns `{ ok: true }` and `Set-Cookie`; it never
 returns the password or token in JSON.
 
-- [ ] **Step 5: Await auth validation in protected handlers**
+- [x] **Step 5: Await auth validation in protected handlers**
 
 Change every live Worker ops handler to `const auth = await validateOpsAuth(req)`.
 
-- [ ] **Step 6: Verify and commit**
+- [x] **Step 6: Verify and commit**
 
 Run `npm run test:p0`, then commit as `feat: replace ops bearer secret with signed session`.
 
