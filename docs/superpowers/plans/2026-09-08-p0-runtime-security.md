@@ -110,29 +110,29 @@ Commit message: `feat: add atomic worker rate limiter`
   `{ fetch(request, env) }`; `worker/index.js` exports the configured app and
   re-exports `RateLimiter`.
 
-- [ ] **Step 1: Write failing Worker-boundary tests**
+- [x] **Step 1: Write failing Worker-boundary tests**
 
 With real `Request`/`Response` values and small fake bindings, verify disabled
 AI requests never call their handler, missing limiter fails closed, exhausted
 limits return `429`, allowed requests reach handlers, assets delegate through
 `ASSETS`, unknown APIs return `404`, and all responses receive active headers.
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `node --test tests/p0-worker-app.test.mjs`
 
-- [ ] **Step 3: Implement the injectable Worker application**
+- [x] **Step 3: Implement the injectable Worker application**
 
 The order is: resolve route → AI gate → rate limit → handler/asset fetch →
 security headers. Hash the Cloudflare client IP with `RATE_LIMIT_SALT`; do not
 store or log the raw value.
 
-- [ ] **Step 4: Wire the production handlers**
+- [x] **Step 4: Wire the production handlers**
 
 Keep `worker/index.js` declarative: import handlers, create the app, export it,
 and re-export the Durable Object class.
 
-- [ ] **Step 5: Verify green, verify the Worker bundle, and commit**
+- [x] **Step 5: Verify green, verify the Worker bundle, and commit**
 
 Run `npm run test:p0` and
 `./node_modules/.bin/wrangler deploy --dry-run --env="" --outdir /tmp/portfolio-p0-worker`,

@@ -23,6 +23,9 @@ import opsRagStatsHandler from './ops/rag-stats.js'
 import opsStatsHandler from './ops/stats.js'
 import opsTracesHandler from './ops/traces.js'
 import opsTraceHandler from './ops/trace.js'
+import { createWorkerApp } from './app.js'
+
+export { RateLimiter } from './rate-limiter.js'
 
 const ROUTES = {
   '/api/chat': chatHandler,
@@ -37,29 +40,4 @@ const ROUTES = {
   '/api/ops/traces': opsTracesHandler,
 }
 
-export default {
-  async fetch(request) {
-    const url = new URL(request.url)
-
-    // /api/ops/trace/<id> — dynamic segment, was the [id].js file route.
-    if (url.pathname.startsWith('/api/ops/trace/')) {
-      return opsTraceHandler(request)
-    }
-
-    const handler = ROUTES[url.pathname]
-    if (handler) {
-      return handler(request)
-    }
-
-    if (url.pathname.startsWith('/api/')) {
-      return new Response(JSON.stringify({ error: 'Not found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      })
-    }
-
-    // Non-API, non-asset requests (shouldn't normally reach here given
-    // run_worker_first is scoped to /api/*) — 404 rather than guessing.
-    return new Response('Not found', { status: 404 })
-  },
-}
+export default createWorkerApp({ routes: ROUTES, traceHandler: opsTraceHandler })
