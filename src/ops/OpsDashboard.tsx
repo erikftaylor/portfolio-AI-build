@@ -6,6 +6,7 @@ import KpiCard from './components/KpiCard'
 import MetricChart from './components/MetricChart'
 import { useOpsApi } from './hooks/useOpsApi'
 import type { OpsStats, TabProps } from './types'
+import { checkOpsSession, logoutOps } from './auth-client.js'
 
 // Lazy-load tab panels (all except Overview which is inline)
 const ConversationsTab = lazy(() => import('./tabs/ConversationsTab'))
@@ -19,10 +20,8 @@ const SystemTab = lazy(() => import('./tabs/SystemTab'))
 const TABS = ['Overview', 'Conversations', 'Costs', 'RAG', 'Security', 'Evals', 'Voice', 'System']
 const DAYS_OPTIONS = [1, 7, 30] as const
 
-const TOKEN_KEY = 'ops_token'
-
 export default function OpsDashboard() {
-  const [authed, setAuthed] = useState(() => !!sessionStorage.getItem(TOKEN_KEY))
+  const [authState, setAuthState] = useState<'checking' | 'authenticated' | 'unauthenticated'>('checking')
   const [activeTab, setActiveTab] = useState('Overview')
   const [days, setDays] = useState(7)
   const [includeEvals, setIncludeEvals] = useState(false)
@@ -60,6 +59,16 @@ export default function OpsDashboard() {
     }
   }, [])
 
+  useEffect(() => {
+    let cancelled = false
+    checkOpsSession()
+      .then(ok => { if (!cancelled) setAuthState(ok ? 'authenticated' : 'unauthenticated') })
+      .catch(() => { if (!cancelled) setAuthState('unauthenticated') })
+    return () => { cancelled = true }
+  }, [])
+
+  const authed = authState === 'authenticated'
+
   const params = useMemo(() => {
     const p: Record<string, string> = { days: String(days) }
     if (includeEvals) p.includeEvals = 'true'
@@ -71,14 +80,22 @@ export default function OpsDashboard() {
     enabled: authed,
   })
 
+  if (authState === 'checking') {
+    return <div className="min-h-screen bg-background" aria-busy="true" />
+  }
+
   if (!authed) {
-    return <OpsAuth onAuth={() => setAuthed(true)} />
+    return <OpsAuth onAuth={() => setAuthState('authenticated')} />
   }
 
   const tabProps: TabProps = { stats, loading }
 
-  const logout = () => {
-    sessionStorage.removeItem(TOKEN_KEY)
+  const logout = async () => {
+    try {
+      await logoutOps()
+    } catch {
+      // The local UI still signs out if the server is temporarily unavailable.
+    }
     // Clear all cached ops data
     const keysToRemove: string[] = []
     for (let i = 0; i < sessionStorage.length; i++) {
@@ -86,7 +103,7 @@ export default function OpsDashboard() {
       if (k?.startsWith('ops_cache_')) keysToRemove.push(k)
     }
     keysToRemove.forEach(k => sessionStorage.removeItem(k))
-    setAuthed(false)
+    setAuthState('unauthenticated')
   }
 
   return (

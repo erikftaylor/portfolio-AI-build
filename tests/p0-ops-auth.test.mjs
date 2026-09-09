@@ -3,6 +3,12 @@ import assert from 'node:assert/strict'
 
 import authHandler from '../worker/ops/auth.js'
 import {
+  checkOpsSession,
+  fetchOps,
+  loginOps,
+  logoutOps,
+} from '../src/ops/auth-client.js'
+import {
   OPS_SESSION_TTL_MS,
   constantTimeEqual,
   createOpsSession,
@@ -128,6 +134,54 @@ test('successful login returns no browser-readable token and supports status and
   assert.equal(logout.status, 200)
   assert.deepEqual(await logout.json(), { ok: true })
   assert.match(logout.headers.get('set-cookie'), /Max-Age=0/)
+})
+
+test('ops client checks session status with same-origin credentials', async () => {
+  const fetchBoundary = async (url, init) => {
+    assert.equal(url, '/api/ops/auth')
+    assert.equal(init.method, 'GET')
+    assert.equal(init.credentials, 'same-origin')
+    return Response.json({ ok: true })
+  }
+
+  assert.equal(await checkOpsSession(fetchBoundary), true)
+})
+
+test('ops client login submits the password but exposes only auth status', async () => {
+  const fetchBoundary = async (url, init) => {
+    assert.equal(url, '/api/ops/auth')
+    assert.equal(init.method, 'POST')
+    assert.equal(init.credentials, 'same-origin')
+    assert.deepEqual(JSON.parse(init.body), { password: 'dashboard-password' })
+    return Response.json({ ok: true, token: 'server-must-not-send-this' })
+  }
+
+  assert.deepEqual(await loginOps('dashboard-password', fetchBoundary), { ok: true })
+})
+
+test('ops client logout deletes the server session', async () => {
+  const fetchBoundary = async (url, init) => {
+    assert.equal(url, '/api/ops/auth')
+    assert.equal(init.method, 'DELETE')
+    assert.equal(init.credentials, 'same-origin')
+    return Response.json({ ok: true })
+  }
+
+  assert.deepEqual(await logoutOps(fetchBoundary), { ok: true })
+})
+
+test('ops data requests use cookies and preserve unauthorized responses', async () => {
+  const fetchBoundary = async (url, init) => {
+    assert.equal(url, 'https://example.com/api/ops/stats')
+    assert.equal(init.credentials, 'same-origin')
+    assert.equal(new Headers(init.headers).has('authorization'), false)
+    return Response.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
+  const response = await fetchOps('https://example.com/api/ops/stats', {
+    headers: { Accept: 'application/json' },
+  }, fetchBoundary)
+  assert.equal(response.status, 401)
 })
 
 function configureAuth() {

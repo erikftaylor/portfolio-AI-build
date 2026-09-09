@@ -193,6 +193,7 @@ Run `npm run test:p0`, then commit as `feat: replace ops bearer secret with sign
 
 **Files:**
 - Create: `src/ops/auth-client.js`
+- Create: `src/ops/auth-client.d.ts`
 - Modify: `src/ops/OpsAuth.tsx`
 - Modify: `src/ops/hooks/useOpsApi.ts`
 - Modify: `src/ops/OpsDashboard.tsx`
@@ -202,7 +203,7 @@ Run `npm run test:p0`, then commit as `feat: replace ops bearer secret with sign
 - Produces: no browser-readable authentication value; existing ops data cache
   keys remain session-local and contain no credentials.
 
-- [ ] **Step 1: Add failing client-boundary tests**
+- [x] **Step 1: Add failing client-boundary tests**
 
 Extend `tests/p0-ops-auth.test.mjs` against the real `auth-client.js` API.
 Assert that session checks, login, authenticated data requests, and logout use
@@ -211,11 +212,11 @@ logout uses DELETE; and a 401 data response is observable without any bearer
 token or browser-readable credential. Use a specific in-memory fetch boundary
 that validates each request and returns real `Response` values.
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `node --test tests/p0-ops-auth.test.mjs`.
 
-- [ ] **Step 3: Update the client flow**
+- [x] **Step 3: Update the client flow**
 
 Create `auth-client.js` with `checkOpsSession(fetchImpl?)`,
 `loginOps(password, fetchImpl?)`, `logoutOps(fetchImpl?)`, and
@@ -224,11 +225,11 @@ and calls the session helper. `OpsAuth` posts through `loginOps` and only
 consumes `{ ok }`. `useOpsApi` uses `fetchOps`. Logout calls `logoutOps`, clears
 only ops data caches, and returns to the login view.
 
-- [ ] **Step 4: Verify P0 tests, TypeScript, and Vite**
+- [x] **Step 4: Verify P0 tests, TypeScript, and Vite**
 
 Run `npm run test:p0`, `./node_modules/.bin/tsc -b`, and `./node_modules/.bin/vite build`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Commit message: `feat: use secure ops cookie sessions`
 
