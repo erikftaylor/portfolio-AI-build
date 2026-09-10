@@ -105,6 +105,9 @@ export function resolveValue(value, registry, stack = []) {
 
   const requestedPath = match[1];
   const mode = stack[0];
+  if (/^(parchment|aubergine)\./.test(requestedPath)) {
+    throw new Error(`Mode-qualified alias is prohibited: ${value}; use an unqualified token path`);
+  }
   const candidates = mode
     ? [`${mode}.${requestedPath}`, requestedPath]
     : [requestedPath];
@@ -143,10 +146,10 @@ export function contrastRatio(foreground, background) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-function aliasesDirectionBand(value, registry, mode, visited = []) {
+function aliasesDirectionBand(value, registry, mode, signalColors, visited = []) {
   if (typeof value !== 'string') return false;
   const match = value.match(aliasPattern);
-  if (!match) return false;
+  if (!match) return signalColors.has(value.toLowerCase());
 
   const requestedPath = match[1];
   const candidates = mode
@@ -161,11 +164,20 @@ function aliasesDirectionBand(value, registry, mode, visited = []) {
     registry.get(resolvedPath).$value,
     registry,
     mode,
+    signalColors,
     [...visited, resolvedPath],
   );
 }
 
 export function validateTokenBundle(bundle) {
+  try {
+    return validateBundle(bundle);
+  } catch (error) {
+    return [`Invalid token bundle: ${error.message}`];
+  }
+}
+
+function validateBundle(bundle) {
   const errors = [];
   const registry = createRegistry(bundle);
 
@@ -197,19 +209,30 @@ export function validateTokenBundle(bundle) {
     'components.direction-band.design.color',
     'components.direction-band.ship.color',
   ]);
+  const signalColors = new Set(
+    [...registry].filter(([tokenPath]) => tokenPath.startsWith('color.signal.'))
+      .map(([, token]) => String(token.$value).toLowerCase()),
+  );
   for (const mode of ['parchment', 'aubergine']) {
     for (const layer of ['semantic', 'components']) {
       for (const [tokenPath, token] of flattenTokens(bundle[layer][mode])) {
+        if (typeof token.$value !== 'string' || !aliasPattern.test(token.$value)) {
+          errors.push(`${mode}.${tokenPath}: ${layer} tokens must use an alias`);
+          continue;
+        }
         const isApprovedDirectionBandColor = approvedDirectionBandPaths.has(`${layer}.${tokenPath}`);
         if (
           !isApprovedDirectionBandColor
-          && aliasesDirectionBand(token.$value, registry, mode)
+          && aliasesDirectionBand(token.$value, registry, mode, signalColors)
         ) {
           errors.push(`${mode}.${tokenPath}: Direction Band alias is prohibited`);
         }
       }
     }
   }
+
+  // Resolve and policy errors already identify invalid inputs; avoid reporting them again in contrast.
+  if (errors.length > 0) return errors;
 
   const resolved = (mode, tokenPath) =>
     resolveValue(registry.get(`${mode}.${tokenPath}`).$value, registry, [mode]);
