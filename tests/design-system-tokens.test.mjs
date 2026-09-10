@@ -40,3 +40,15 @@ test('core typography uses Instrument Sans without a condensed family', () => {
     false,
   );
 });
+
+test('core aliases are limited to the approved display-family alias', () => {
+  const { core } = loadTokenBundle(projectRoot);
+  for (const [tokenPath, token] of flattenTokens(core)) {
+    if (tokenPath === 'font.family.display') continue;
+    assert.equal(
+      typeof token.$value === 'string' && token.$value.startsWith('{'),
+      false,
+      `${tokenPath} must use a raw value`,
+    );
+  }
+});
