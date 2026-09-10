@@ -360,6 +360,7 @@ test('README documents both surface modes and the Direction Band boundary', () =
   assert.match(readme, /data-et-surface="aubergine"/);
   assert.match(readme, /Direction Band/);
   assert.match(readme, /not.*button/i);
+  assert.match(readme, /Research Cyan/);
   assert.match(readme, /Figma/);
   assert.match(readme, /npm run tokens:check/);
 });
