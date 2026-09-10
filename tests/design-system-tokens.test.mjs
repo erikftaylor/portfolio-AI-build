@@ -295,3 +295,28 @@ test('committed CSS matches deterministic token output', () => {
       < generated.indexOf('--et-motion-duration-standard: 0ms;'),
   );
 });
+
+test('Figma handoff names every JSON token path', () => {
+  const bundle = loadTokenBundle(projectRoot);
+  const figma = fs.readFileSync(
+    path.join(projectRoot, 'design-system', 'figma', 'variables.md'),
+    'utf8',
+  );
+  const documented = new Set(
+    [...figma.matchAll(/^\| `([^`]+)` \|/gm)].map((match) => match[1]),
+  );
+
+  for (const tokenPath of flattenTokens(bundle.core).keys()) {
+    assert.ok(documented.has(tokenPath), `Missing Figma core row: ${tokenPath}`);
+  }
+  for (const layer of ['semantic', 'components']) {
+    for (const mode of ['parchment', 'aubergine']) {
+      for (const tokenPath of flattenTokens(bundle[layer][mode]).keys()) {
+        assert.ok(
+          documented.has(`${mode}.${tokenPath}`),
+          `Missing Figma ${layer} row: ${mode}.${tokenPath}`,
+        );
+      }
+    }
+  }
+});
