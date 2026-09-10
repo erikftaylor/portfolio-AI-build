@@ -57,7 +57,7 @@ The Direction Band represents the design process: **Research → Decide → Desi
 
 Use it as a large brand graphic: once in a hero or major evidence frame, with a second appearance only at a major decision point. Do not use it on every card.
 
-The Direction Band is not buttons, links, navigation, charts, status, form feedback, or a semantic color system. Its signal colors are non-text graphic accents; do not communicate meaning with color alone. The focus ring is the intentional signal-color exception because it provides a visible, non-text keyboard-focus indicator in both surface modes.
+The Direction Band is not buttons, links, navigation, charts, status, form feedback, or a semantic color system. Its signal colors are non-text graphic accents; do not communicate meaning with color alone. The approved focus ring uses Research Cyan and is the intentional Direction Band signal-color exception because it provides a visible, non-text keyboard-focus indicator in both surface modes.
 
 ## Typography, layout, and evidence
 
