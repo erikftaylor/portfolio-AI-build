@@ -39,7 +39,11 @@ export function flattenTokens(node, prefix = []) {
 }
 
 function cssName(tokenPath) {
-  return `--et-${tokenPath.replaceAll('.', '-')}`;
+  const kebabPath = tokenPath
+    .split('.')
+    .map((segment) => segment.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase())
+    .join('-');
+  return `--et-${kebabPath}`;
 }
 
 function cssValue(value) {
@@ -78,7 +82,7 @@ export function buildCss(bundle) {
     blocks.push(renderBlock(`[data-et-surface="${mode}"]`, entries));
   }
 
-  blocks.push(`@media (prefers-reduced-motion: reduce) {\n  :root {\n    --et-motion-duration-fast: 0ms;\n    --et-motion-duration-standard: 0ms;\n    --et-motion-duration-deliberate: 0ms;\n  }\n}`);
+  blocks.push(`@media (prefers-reduced-motion: reduce) {\n  :root {\n    --et-motion-duration-deliberate: 0ms;\n    --et-motion-duration-fast: 0ms;\n    --et-motion-duration-standard: 0ms;\n  }\n}`);
   return `${blocks.join('\n\n')}\n`;
 }
 
