@@ -29,3 +29,13 @@ Verified all requested core token paths and approved values are present, typogra
 ## Concerns
 
 None. Semantic and component mode shells are intentionally empty and reserved for later tasks.
+
+## Fix Round 1
+
+Replaced every core-token alias except the approved `font.family.display` alias with equivalent raw values, including all composite typography family and weight leaves. Added an explicit alias-contract assertion to `tests/design-system-tokens.test.mjs`.
+
+Covering test: `tests/design-system-tokens.test.mjs`.
+
+Command and output: `node --test tests/design-system-tokens.test.mjs` — 3 tests, 3 passed, 0 failed. `git diff --check` passed.
+
+Self-review: confirmed the only remaining core alias is `font.family.display`, and approved typography values remain unchanged.
