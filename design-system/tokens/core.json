@@ -1,5 +1,10 @@
 {
   "color": {
+    "transparent": {
+      "$type": "color",
+      "$value": "#00000000",
+      "$description": "Transparent fill for secondary and tertiary controls."
+    },
     "paper": {
       "50": { "$type": "color", "$value": "#FBF6F0" },
       "100": { "$type": "color", "$value": "#F5EADC" },
