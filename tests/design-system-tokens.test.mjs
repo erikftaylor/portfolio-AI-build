@@ -283,4 +283,15 @@ test('committed CSS matches deterministic token output', () => {
   assert.match(generated, /\[data-et-surface="parchment"\]/);
   assert.match(generated, /\[data-et-surface="aubergine"\]/);
   assert.match(generated, /--et-button-primary-background:/);
+  assert.match(generated, /--et-font-style-display-xl-font-family:/);
+  assert.match(generated, /--et-font-style-display-xl-line-height:/);
+  assert.doesNotMatch(generated, /--et-[^:;]*[A-Z][^:;]*:/);
+  assert.ok(
+    generated.indexOf('--et-motion-duration-deliberate: 0ms;')
+      < generated.indexOf('--et-motion-duration-fast: 0ms;'),
+  );
+  assert.ok(
+    generated.indexOf('--et-motion-duration-fast: 0ms;')
+      < generated.indexOf('--et-motion-duration-standard: 0ms;'),
+  );
 });
