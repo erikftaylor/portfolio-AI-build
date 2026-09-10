@@ -107,6 +107,36 @@
   },
   "radius": { "none": { "$type": "dimension", "$value": "0px" }, "control": { "$type": "dimension", "$value": "2px" }, "tag": { "$type": "dimension", "$value": "2px" } },
   "border": { "default": { "$type": "dimension", "$value": "1px" }, "focus": { "$type": "dimension", "$value": "2px" } },
+  "size": {
+    "control": { "minimum": { "$type": "dimension", "$value": "44px" } },
+    "navigation": {
+      "height": { "$type": "dimension", "$value": "68px" },
+      "monogram": { "$type": "dimension", "$value": "32px" },
+      "link-gap": { "$type": "dimension", "$value": "28px" }
+    },
+    "direction-band": {
+      "sm": {
+        "stripe-width": { "$type": "dimension", "$value": "8px" },
+        "gap": { "$type": "dimension", "$value": "5px" },
+        "height": { "$type": "dimension", "$value": "40px" }
+      },
+      "md": {
+        "stripe-width": { "$type": "dimension", "$value": "12px" },
+        "gap": { "$type": "dimension", "$value": "6px" },
+        "height": { "$type": "dimension", "$value": "74px" }
+      },
+      "lg": {
+        "stripe-width": { "$type": "dimension", "$value": "22px" },
+        "gap": { "$type": "dimension", "$value": "10px" },
+        "height": { "$type": "dimension", "$value": "120px" }
+      }
+    }
+  },
+  "count": {
+    "hero": { "actions": { "$type": "number", "$value": 2 } },
+    "contact-cta": { "actions": { "$type": "number", "$value": 1 } }
+  },
+  "angle": { "direction-band": { "$type": "dimension", "$value": "18deg" } },
   "shadow": { "overlay": { "$type": "shadow", "$value": { "color": "#2D202A26", "offsetX": "0px", "offsetY": "12px", "blur": "32px", "spread": "0px" }, "$description": "Reserved for overlays; not for cards or page sections." } },
   "texture": { "paper": { "opacity": { "$type": "number", "$value": 0.04 } }, "aubergine": { "opacity": { "$type": "number", "$value": 0.025 } } },
   "motion": { "duration": { "fast": { "$type": "duration", "$value": "120ms" }, "standard": { "$type": "duration", "$value": "220ms" }, "deliberate": { "$type": "duration", "$value": "360ms" } }, "easing": { "standard": { "$type": "cubicBezier", "$value": [0.2, 0, 0, 1] } } }

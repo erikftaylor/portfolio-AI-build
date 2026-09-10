@@ -9,6 +9,7 @@ import {
   flattenTokens,
   loadTokenBundle,
   resolveValue,
+  validateTokenBundle,
 } from '../scripts/lib/design-tokens.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -155,4 +156,48 @@ test('status and Direction Band colors meet their intended-use contrast threshol
     assert.ok(contrastRatio(signalColor, canvas('parchment')) >= 3);
     assert.ok(contrastRatio(signalColor, canvas('aubergine')) >= 3);
   }
+});
+
+test('component modes expose identical paths', () => {
+  const { components } = loadTokenBundle(projectRoot);
+  const parchment = [...flattenTokens(components.parchment).keys()].sort();
+  const aubergine = [...flattenTokens(components.aubergine).keys()].sort();
+
+  assert.deepEqual(parchment, aubergine);
+  assert.ok(parchment.includes('button.primary.background'));
+  assert.ok(parchment.includes('case-card.featured.background'));
+  assert.ok(parchment.includes('direction-band.research.color'));
+});
+
+test('all aliases resolve and Direction Band colors stay out of UI semantics', () => {
+  const bundle = loadTokenBundle(projectRoot);
+  assert.deepEqual(validateTokenBundle(bundle), []);
+});
+
+test('validator rejects a Direction Band color used as an action', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.semantic.parchment.color.action.primary.background.$value = '{color.signal.ship}';
+  assert.ok(
+    validateTokenBundle(bundle).some((error) =>
+      error.includes('Direction Band alias is prohibited'),
+    ),
+  );
+});
+
+test('validator rejects a transitive Direction Band color used by navigation', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.components.aubergine.navigation.foreground.$value = '{color.focus.ring}';
+  assert.ok(
+    validateTokenBundle(bundle).some((error) =>
+      error.includes('Direction Band alias is prohibited'),
+    ),
+  );
+});
+
+test('validator rejects unresolved aliases', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.components.aubergine.footer.border.$value = '{color.missing.value}';
+  assert.ok(
+    validateTokenBundle(bundle).some((error) => error.includes('Unresolved alias')),
+  );
 });
