@@ -94,3 +94,84 @@ export function contrastRatio(foreground, background) {
   const darker = Math.min(relativeLuminance(foreground), relativeLuminance(background));
   return (lighter + 0.05) / (darker + 0.05);
 }
+
+function aliasesDirectionBand(value, registry, mode, visited = []) {
+  if (typeof value !== 'string') return false;
+  const match = value.match(aliasPattern);
+  if (!match) return false;
+
+  const requestedPath = match[1];
+  const candidates = mode
+    ? [`${mode}.${requestedPath}`, requestedPath]
+    : [requestedPath];
+  const resolvedPath = candidates.find((candidate) => registry.has(candidate));
+
+  if (!resolvedPath || visited.includes(resolvedPath)) return false;
+  if (resolvedPath.startsWith('color.signal.')) return true;
+
+  return aliasesDirectionBand(
+    registry.get(resolvedPath).$value,
+    registry,
+    mode,
+    [...visited, resolvedPath],
+  );
+}
+
+export function validateTokenBundle(bundle) {
+  const errors = [];
+  const registry = createRegistry(bundle);
+
+  for (const [tokenPath, token] of registry) {
+    try {
+      const mode = tokenPath.startsWith('parchment.')
+        ? 'parchment'
+        : tokenPath.startsWith('aubergine.')
+          ? 'aubergine'
+          : undefined;
+      resolveValue(token.$value, registry, mode ? [mode] : []);
+    } catch (error) {
+      errors.push(`${tokenPath}: ${error.message}`);
+    }
+  }
+
+  for (const layer of ['semantic', 'components']) {
+    const parchment = [...flattenTokens(bundle[layer].parchment).keys()].sort();
+    const aubergine = [...flattenTokens(bundle[layer].aubergine).keys()].sort();
+    if (JSON.stringify(parchment) !== JSON.stringify(aubergine)) {
+      errors.push(`${layer}: Parchment and Aubergine paths differ`);
+    }
+  }
+
+  const forbiddenRoots = ['color.action', 'color.status', 'button', 'navigation'];
+  for (const mode of ['parchment', 'aubergine']) {
+    for (const [tokenPath, token] of [
+      ...flattenTokens(bundle.semantic[mode]),
+      ...flattenTokens(bundle.components[mode]),
+    ]) {
+      if (
+        forbiddenRoots.some((root) => tokenPath.startsWith(root))
+        && aliasesDirectionBand(token.$value, registry, mode)
+      ) {
+        errors.push(`${mode}.${tokenPath}: Direction Band alias is prohibited`);
+      }
+    }
+  }
+
+  const resolved = (mode, tokenPath) =>
+    resolveValue(registry.get(`${mode}.${tokenPath}`).$value, registry, [mode]);
+  for (const mode of ['parchment', 'aubergine']) {
+    const canvas = resolved(mode, 'color.surface.canvas');
+    for (const status of ['info', 'success', 'warning', 'danger']) {
+      if (contrastRatio(resolved(mode, `color.status.${status}`), canvas) < 4.5) {
+        errors.push(`${mode}.color.status.${status}: contrast is below 4.5:1`);
+      }
+    }
+    for (const signal of ['research', 'decide', 'design', 'ship']) {
+      if (contrastRatio(registry.get(`color.signal.${signal}`).$value, canvas) < 3) {
+        errors.push(`${mode}.color.signal.${signal}: contrast is below 3:1`);
+      }
+    }
+  }
+
+  return errors;
+}
