@@ -12,11 +12,24 @@ Create exactly these three variable collections:
 
 Keep aliases as Figma variable aliases rather than copying resolved values. In the tables below, brace notation is the alias target. An unpopulated mode cell is a table placeholder.
 
+## Native Figma type and value conversion
+
+The variable tables retain the exact JSON value and JSON type for parity. Apply the native Figma representation below when creating each variable. Record the original unit or recipe in the Figma variable description when the native Figma value has no unit field.
+
+| JSON type | Native Figma type | JSON Value | Figma Representation |
+|---|---|---|---|
+| `color` | `Color` | `#RRGGBB` or `#RRGGBBAA` | Enter the same color and alpha. A color alias remains a Color alias. |
+| `dimension`, `number`, `fontWeight`, `duration` | `Float` | `64px`, `18deg`, `220ms`, or a unitless number | Store the numeric value only: 64, 18, 220, or the unitless value. Put `px`, `deg`, `ms`, or the `wght` axis label in the description. |
+| `fontFamily`, `textCase`, `cubicBezier` | `String` | CSS stack, case value, or cubic-bezier array | Store a String recipe or reference where native variable binding is unavailable. Apply the actual font and case through the Figma text style. |
+| `shadow` | Not a native variable | `{ color, offsetX, offsetY, blur, spread }` | Apply the `ET / Effect / Overlay` effect style rather than creating a variable. |
+
+Aliases only connect matching native Figma types. Preserve a JSON alias as a Figma alias only when its source and target are both Color, both Float, or both String; apply effect styles directly and never alias a shadow as a variable. The JSON Value column remains the parity source, and the Figma Representation column specifies the native entry or application method.
+
 ## ET / Core
 
 Mode: `Value`.
 
-| Token Path | Figma Name | Value | Type |
+| Token Path | Figma Name | JSON Value | JSON Type |
 |---|---|---:|---|
 | `color.transparent` | `color/transparent` | #00000000 | color |
 | `color.paper.50` | `color/paper/50` | #FBF6F0 | color |
@@ -187,7 +200,7 @@ Mode: `Value`.
 
 Modes: `Parchment`, `Aubergine`.
 
-| Token Path | Figma Name | Parchment | Aubergine | Type |
+| Token Path | Figma Name | Parchment JSON Value | Aubergine JSON Value | JSON Type |
 |---|---|---:|---:|---|
 | `parchment.color.surface.canvas` | `color/surface/canvas` | {color.paper.100} | — | color |
 | `parchment.color.surface.raised` | `color/surface/raised` | {color.paper.50} | — | color |
@@ -246,7 +259,7 @@ Modes: `Parchment`, `Aubergine`.
 
 Modes: `Parchment`, `Aubergine`.
 
-| Token Path | Figma Name | Parchment | Aubergine | Type |
+| Token Path | Figma Name | Parchment JSON Value | Aubergine JSON Value | JSON Type |
 |---|---|---:|---:|---|
 | `parchment.navigation.background` | `navigation/background` | {color.surface.canvas} | — | color |
 | `parchment.navigation.foreground` | `navigation/foreground` | {color.text.primary} | — | color |
@@ -401,22 +414,22 @@ Modes: `Parchment`, `Aubergine`.
 
 ## Text styles
 
-Create the following twelve Figma text styles. Every style uses the exact family `Instrument Sans, system-ui, sans-serif`; do not add a condensed or secondary display family. Display styles use sentence case. Eyebrow is uppercase and limited to one use per three sections.
+Create the following twelve Figma text styles with the Instrument Sans variable font. The actual family name `Instrument Sans` is the value selected in Figma, while the CSS stack `Instrument Sans, system-ui, sans-serif` remains the JSON and code-facing string. Use the `wght` axis values including 450, 620, and 650 exactly as listed; do not round them to named static weights or add a condensed or secondary display family. Display styles use sentence case. Eyebrow is uppercase and limited to one use per three sections.
 
-| Figma text style | Family | Weight | Size | Line height | Tracking | Case |
+| Figma text style | Figma family | `wght` axis | Size | Line height | Figma tracking (% / px) | Case |
 |---|---|---:|---:|---:|---:|---|
-| `ET / Display / XL` | Instrument Sans, system-ui, sans-serif | 650 | 64px | 64px | -0.045em | None |
-| `ET / Display / LG` | Instrument Sans, system-ui, sans-serif | 650 | 56px | 58px | -0.04em | None |
-| `ET / Heading / XL` | Instrument Sans, system-ui, sans-serif | 620 | 40px | 44px | -0.035em | None |
-| `ET / Heading / LG` | Instrument Sans, system-ui, sans-serif | 620 | 32px | 36px | -0.03em | None |
-| `ET / Heading / MD` | Instrument Sans, system-ui, sans-serif | 600 | 24px | 28px | -0.02em | None |
-| `ET / Heading / SM` | Instrument Sans, system-ui, sans-serif | 600 | 20px | 24px | -0.015em | None |
-| `ET / Body / LG` | Instrument Sans, system-ui, sans-serif | 400 | 18px | 28px | 0 | None |
-| `ET / Body / MD` | Instrument Sans, system-ui, sans-serif | 400 | 16px | 24px | 0 | None |
-| `ET / Body / SM` | Instrument Sans, system-ui, sans-serif | 400 | 14px | 20px | 0 | None |
-| `ET / Label` | Instrument Sans, system-ui, sans-serif | 650 | 12px | 16px | 0 | None |
-| `ET / Eyebrow` | Instrument Sans, system-ui, sans-serif | 700 | 11px | 16px | 0.12em | Uppercase |
-| `ET / Caption` | Instrument Sans, system-ui, sans-serif | 450 | 11px | 16px | 0.01em | None |
+| `ET / Display / XL` | Instrument Sans | 650 | 64px | 64px | -4.5% / -2.88px | None |
+| `ET / Display / LG` | Instrument Sans | 650 | 56px | 58px | -4% / -2.24px | None |
+| `ET / Heading / XL` | Instrument Sans | 620 | 40px | 44px | -3.5% / -1.40px | None |
+| `ET / Heading / LG` | Instrument Sans | 620 | 32px | 36px | -3% / -0.96px | None |
+| `ET / Heading / MD` | Instrument Sans | 600 | 24px | 28px | -2% / -0.48px | None |
+| `ET / Heading / SM` | Instrument Sans | 600 | 20px | 24px | -1.5% / -0.30px | None |
+| `ET / Body / LG` | Instrument Sans | 400 | 18px | 28px | 0% / 0px | None |
+| `ET / Body / MD` | Instrument Sans | 400 | 16px | 24px | 0% / 0px | None |
+| `ET / Body / SM` | Instrument Sans | 400 | 14px | 20px | 0% / 0px | None |
+| `ET / Label` | Instrument Sans | 650 | 12px | 16px | 0% / 0px | None |
+| `ET / Eyebrow` | Instrument Sans | 700 | 11px | 16px | 12% / 1.32px | Uppercase |
+| `ET / Caption` | Instrument Sans | 450 | 11px | 16px | 1% / 0.11px | None |
 
 ## Grid and effect styles
 
