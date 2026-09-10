@@ -186,7 +186,74 @@ test('validator rejects a Direction Band color used as an action', () => {
 
 test('validator rejects a transitive Direction Band color used by navigation', () => {
   const bundle = structuredClone(loadTokenBundle(projectRoot));
-  bundle.components.aubergine.navigation.foreground.$value = '{color.focus.ring}';
+  bundle.core.color.unsafe = {
+    alias: { $type: 'color', $value: '{color.signal.research}' },
+  };
+  bundle.components.aubergine.navigation.foreground.$value = '{color.unsafe.alias}';
+  assert.ok(
+    validateTokenBundle(bundle).some((error) =>
+      error.includes('Direction Band alias is prohibited'),
+    ),
+  );
+});
+
+test('validator rejects a Direction Band color used directly by a chart', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.components.parchment.chart = {
+    accent: { $type: 'color', $value: '{color.signal.ship}' },
+  };
+  assert.ok(
+    validateTokenBundle(bundle).some((error) =>
+      error.includes('Direction Band alias is prohibited'),
+    ),
+  );
+});
+
+test('validator rejects a Direction Band color used directly for form feedback', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.semantic.parchment.color.form = {
+    feedback: { $type: 'color', $value: '{color.signal.decide}' },
+  };
+  assert.ok(
+    validateTokenBundle(bundle).some((error) =>
+      error.includes('Direction Band alias is prohibited'),
+    ),
+  );
+});
+
+test('validator rejects a Direction Band color used transitively for form feedback', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.core.color.unsafe = {
+    alias: { $type: 'color', $value: '{color.signal.decide}' },
+  };
+  bundle.semantic.aubergine.color.form = {
+    feedback: { $type: 'color', $value: '{color.unsafe.alias}' },
+  };
+  assert.ok(
+    validateTokenBundle(bundle).some((error) =>
+      error.includes('Direction Band alias is prohibited'),
+    ),
+  );
+});
+
+test('validator rejects a Direction Band color used transitively by a chart', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.core.color.unsafe = {
+    alias: { $type: 'color', $value: '{color.signal.ship}' },
+  };
+  bundle.components.aubergine.chart = {
+    accent: { $type: 'color', $value: '{color.unsafe.alias}' },
+  };
+  assert.ok(
+    validateTokenBundle(bundle).some((error) =>
+      error.includes('Direction Band alias is prohibited'),
+    ),
+  );
+});
+
+test('validator rejects a Direction Band color in an arbitrary component path', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.components.parchment.metadata.foreground.$value = '{color.signal.design}';
   assert.ok(
     validateTokenBundle(bundle).some((error) =>
       error.includes('Direction Band alias is prohibited'),
