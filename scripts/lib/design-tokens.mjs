@@ -142,17 +142,23 @@ export function validateTokenBundle(bundle) {
     }
   }
 
-  const forbiddenRoots = ['color.action', 'color.status', 'button', 'navigation'];
+  const approvedDirectionBandPaths = new Set([
+    'semantic.color.focus.ring',
+    'components.direction-band.research.color',
+    'components.direction-band.decide.color',
+    'components.direction-band.design.color',
+    'components.direction-band.ship.color',
+  ]);
   for (const mode of ['parchment', 'aubergine']) {
-    for (const [tokenPath, token] of [
-      ...flattenTokens(bundle.semantic[mode]),
-      ...flattenTokens(bundle.components[mode]),
-    ]) {
-      if (
-        forbiddenRoots.some((root) => tokenPath.startsWith(root))
-        && aliasesDirectionBand(token.$value, registry, mode)
-      ) {
-        errors.push(`${mode}.${tokenPath}: Direction Band alias is prohibited`);
+    for (const layer of ['semantic', 'components']) {
+      for (const [tokenPath, token] of flattenTokens(bundle[layer][mode])) {
+        const isApprovedDirectionBandColor = approvedDirectionBandPaths.has(`${layer}.${tokenPath}`);
+        if (
+          !isApprovedDirectionBandColor
+          && aliasesDirectionBand(token.$value, registry, mode)
+        ) {
+          errors.push(`${mode}.${tokenPath}: Direction Band alias is prohibited`);
+        }
       }
     }
   }
