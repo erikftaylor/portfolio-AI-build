@@ -84,6 +84,36 @@ test('core aliases are limited to the approved display-family alias', () => {
   }
 });
 
+test('resolveValue rejects an unresolved alias', () => {
+  assert.throws(
+    () => resolveValue('{color.missing}', new Map()),
+    /Unresolved alias: \{color\.missing\}/,
+  );
+});
+
+test('resolveValue rejects a direct circular alias', () => {
+  const registry = new Map([
+    ['color.loop', { $value: '{color.loop}' }],
+  ]);
+
+  assert.throws(
+    () => resolveValue('{color.loop}', registry),
+    /Circular alias: color\.loop -> color\.loop/,
+  );
+});
+
+test('resolveValue rejects an indirect circular alias', () => {
+  const registry = new Map([
+    ['color.first', { $value: '{color.second}' }],
+    ['color.second', { $value: '{color.first}' }],
+  ]);
+
+  assert.throws(
+    () => resolveValue('{color.first}', registry),
+    /Circular alias: color\.first -> color\.second -> color\.first/,
+  );
+});
+
 test('semantic modes expose identical paths', () => {
   const { semantic } = loadTokenBundle(projectRoot);
   const parchment = [...flattenTokens(semantic.parchment).keys()].sort();
