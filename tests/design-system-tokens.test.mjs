@@ -320,3 +320,32 @@ test('Figma handoff names every JSON token path', () => {
     }
   }
 });
+
+test('Figma handoff maps JSON token types to native Figma representations', () => {
+  const figma = fs.readFileSync(
+    path.join(projectRoot, 'design-system', 'figma', 'variables.md'),
+    'utf8',
+  );
+
+  assert.match(figma, /\| `color` \| `Color` \|/);
+  assert.match(figma, /\| `dimension`, `number`, `fontWeight`, `duration` \| `Float` \|/);
+  assert.match(figma, /\| `fontFamily`, `textCase`, `cubicBezier` \| `String` \|/);
+  assert.match(figma, /`shadow` \| Not a native variable \|/);
+  assert.match(figma, /Aliases only connect matching native Figma types/);
+  assert.match(figma, /JSON Value.*Figma Representation/);
+});
+
+test('Figma handoff makes Instrument Sans typography executable', () => {
+  const figma = fs.readFileSync(
+    path.join(projectRoot, 'design-system', 'figma', 'variables.md'),
+    'utf8',
+  );
+
+  assert.match(figma, /actual family name `Instrument Sans`/);
+  assert.match(figma, /Instrument Sans variable font/);
+  assert.match(figma, /`wght` axis values including 450, 620, and 650/);
+  assert.match(figma, /\| `ET \/ Display \/ XL` \| Instrument Sans \| 650 \| 64px \| 64px \| -4\.5% \/ -2\.88px \|/);
+  assert.match(figma, /\| `ET \/ Heading \/ XL` \| Instrument Sans \| 620 \| 40px \| 44px \| -3\.5% \/ -1\.40px \|/);
+  assert.match(figma, /\| `ET \/ Eyebrow` \| Instrument Sans \| 700 \| 11px \| 16px \| 12% \/ 1\.32px \|/);
+  assert.match(figma, /\| `ET \/ Caption` \| Instrument Sans \| 450 \| 11px \| 16px \| 1% \/ 0\.11px \|/);
+});
