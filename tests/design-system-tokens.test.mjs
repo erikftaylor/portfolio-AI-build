@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import fs from 'node:fs';
 
 import {
   contrastRatio,
@@ -10,6 +11,7 @@ import {
   loadTokenBundle,
   resolveValue,
   validateTokenBundle,
+  buildCss,
 } from '../scripts/lib/design-tokens.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -267,4 +269,18 @@ test('validator rejects unresolved aliases', () => {
   assert.ok(
     validateTokenBundle(bundle).some((error) => error.includes('Unresolved alias')),
   );
+});
+
+test('committed CSS matches deterministic token output', () => {
+  const bundle = loadTokenBundle(projectRoot);
+  const generated = buildCss(bundle);
+  const committed = fs.readFileSync(
+    path.join(projectRoot, 'design-system', 'tokens', 'tokens.css'),
+    'utf8',
+  );
+  assert.equal(committed, generated);
+  assert.match(generated, /--et-color-paper-100: #F5EADC;/);
+  assert.match(generated, /\[data-et-surface="parchment"\]/);
+  assert.match(generated, /\[data-et-surface="aubergine"\]/);
+  assert.match(generated, /--et-button-primary-background:/);
 });
