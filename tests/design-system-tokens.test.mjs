@@ -271,6 +271,86 @@ test('validator rejects unresolved aliases', () => {
   );
 });
 
+test('validator requires aliases for every semantic and component value', () => {
+  for (const layer of ['semantic', 'components']) {
+    for (const mode of ['parchment', 'aubergine']) {
+      for (const value of ['#F13737', '#46313F', 44, null]) {
+        const bundle = structuredClone(loadTokenBundle(projectRoot));
+        const token = layer === 'semantic'
+          ? bundle[layer][mode].color.action.primary.background
+          : bundle[layer][mode].button.primary.background;
+        token.$value = value;
+        assert.ok(
+          validateTokenBundle(bundle).some((error) => error.includes('must use an alias')),
+          `${layer}.${mode} must reject raw ${JSON.stringify(value)}`,
+        );
+      }
+    }
+  }
+});
+
+test('validator rejects signal colors copied into unrelated core primitives', () => {
+  for (const mode of ['parchment', 'aubergine']) {
+    for (const layer of ['semantic', 'components']) {
+      const bundle = structuredClone(loadTokenBundle(projectRoot));
+      bundle.core.color.unsafe = { $type: 'color', $value: '#f13737' };
+      const token = layer === 'semantic'
+        ? bundle[layer][mode].color.action.primary.background
+        : bundle[layer][mode].button.primary.background;
+      token.$value = '{color.unsafe}';
+      assert.ok(
+        validateTokenBundle(bundle).some((error) => error.includes('Direction Band')),
+        `${layer}.${mode} must reject a resolved signal color`,
+      );
+    }
+  }
+});
+
+test('validator requires aliases even at approved signal paths', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.semantic.parchment.color.focus.ring.$value = '#0095A0';
+  bundle.components.aubergine['direction-band'].ship.color.$value = '#F13737';
+  const errors = validateTokenBundle(bundle);
+  for (const tokenPath of ['parchment.color.focus.ring', 'aubergine.direction-band.ship.color']) {
+    assert.ok(errors.some((error) => error.includes(tokenPath) && error.includes('must use an alias')));
+  }
+});
+
+for (const targetMode of ['parchment', 'aubergine']) {
+  test(`validator rejects ${targetMode === 'parchment' ? 'same-mode' : 'cross-mode'} qualified aliases`, () => {
+    const bundle = structuredClone(loadTokenBundle(projectRoot));
+    bundle.components.parchment.button.primary.background.$value = `{${targetMode}.color.action.primary.background}`;
+    const errors = validateTokenBundle(bundle);
+    assert.ok(errors.some((error) =>
+      error.includes('parchment.button.primary.background') && error.includes('Mode-qualified alias'),
+    ));
+  });
+}
+
+test('validator returns one error for an unresolved status alias instead of throwing', () => {
+  const bundle = structuredClone(loadTokenBundle(projectRoot));
+  bundle.semantic.parchment.color.status.info.$value = '{color.missing.status}';
+  let errors;
+  assert.doesNotThrow(() => { errors = validateTokenBundle(bundle); });
+  assert.ok(Array.isArray(errors));
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /parchment\.color\.status\.info: Unresolved alias/);
+});
+
+test('validator returns readable errors for invalid contrast inputs and missing bundle layers', () => {
+  const invalidContrast = structuredClone(loadTokenBundle(projectRoot));
+  invalidContrast.semantic.parchment.color.status.info.$value = '{font.family.sans}';
+  const missingLayer = structuredClone(loadTokenBundle(projectRoot));
+  delete missingLayer.semantic;
+  for (const bundle of [invalidContrast, missingLayer, null]) {
+    let errors;
+    assert.doesNotThrow(() => { errors = validateTokenBundle(bundle); });
+    assert.ok(Array.isArray(errors));
+    assert.ok(errors.length > 0);
+    assert.ok(errors.every((error) => typeof error === 'string' && error.length > 0));
+  }
+});
+
 test('committed CSS matches deterministic token output', () => {
   const bundle = loadTokenBundle(projectRoot);
   const generated = buildCss(bundle);
