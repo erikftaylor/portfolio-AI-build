@@ -52,6 +52,8 @@ linkedin-post.md
 # Test artifacts
 test-results/
 chatbot/.playwright-mcp/
+.worktrees/
+.superpowers/sdd/
 
 # Stray screenshots in root
 /*.png
