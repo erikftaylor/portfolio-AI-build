@@ -349,3 +349,17 @@ test('Figma handoff makes Instrument Sans typography executable', () => {
   assert.match(figma, /\| `ET \/ Eyebrow` \| Instrument Sans \| 700 \| 11px \| 16px \| 12% \/ 1\.32px \|/);
   assert.match(figma, /\| `ET \/ Caption` \| Instrument Sans \| 450 \| 11px \| 16px \| 1% \/ 0\.11px \|/);
 });
+
+test('README documents both surface modes and the Direction Band boundary', () => {
+  const readme = fs.readFileSync(
+    path.join(projectRoot, 'design-system', 'README.md'),
+    'utf8',
+  );
+
+  assert.match(readme, /data-et-surface="parchment"/);
+  assert.match(readme, /data-et-surface="aubergine"/);
+  assert.match(readme, /Direction Band/);
+  assert.match(readme, /not.*button/i);
+  assert.match(readme, /Figma/);
+  assert.match(readme, /npm run tokens:check/);
+});
