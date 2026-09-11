@@ -31,11 +31,7 @@
     "diagnose:rag": "npx tsx scripts/diagnose-rag.ts",
     "palette:contrast": "npx tsx scripts/check-palette-contrast.ts",
     "identity:check": "npx tsx scripts/identity-check.ts",
-    "identity:check:strict": "npx tsx scripts/identity-check.ts --strict",
-    "tokens:build": "node scripts/build-design-tokens.mjs",
-    "tokens:test": "node --test tests/design-system-tokens.test.mjs",
-    "tokens:validate": "node scripts/validate-design-tokens.mjs",
-    "tokens:check": "npm run tokens:validate && npm run tokens:build && git diff --exit-code -- design-system/tokens/tokens.css && npm run tokens:test"
+    "identity:check:strict": "npx tsx scripts/identity-check.ts --strict"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
