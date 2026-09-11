@@ -51,13 +51,19 @@ Actions have a deliberately restrained hierarchy:
 
 All interactive controls need visible focus, a 44 by 44px minimum target, and the approved focus-ring token with its offset. Disabled controls do not respond to hover or active input.
 
+## Links and form fields
+
+**Link** is the underlined, low-emphasis action pattern. Use it for supporting navigation or contextual actions, preserve its 44px target, and keep the underline visible in every interactive state.
+
+**Form Field** is the pattern for a visible label, a 44px input, and concise supporting text. Keep the label visible rather than relying on placeholder text. On an invalid submission, replace the helper with a specific error that explains what to correct; never communicate the error with color alone.
+
 ## Direction Band: a brand motif, not UI color
 
 The Direction Band represents the design process: **Research → Decide → Design → Ship**. It is four equal-width, 18-degree stripes in that fixed order, with square ends and no outline, keyline, per-stripe animation, recoloring, cropping, or reordering.
 
 Use it as a large brand graphic: once in a hero or major evidence frame, with a second appearance only at a major decision point. Do not use it on every card.
 
-The Direction Band is not buttons, links, navigation, charts, status, form feedback, or a semantic color system. Its signal colors are non-text graphic accents; do not communicate meaning with color alone. The approved focus ring uses Research Cyan and is the intentional Direction Band signal-color exception because it provides a visible, non-text keyboard-focus indicator in both surface modes.
+The Direction Band is not buttons, links, navigation, charts, status, form feedback, or a semantic color system. Its signal colors are non-text graphic accents; do not communicate meaning with color alone. Focus uses mode-specific cyan tokens so it remains visible on every approved surface.
 
 ## Typography, layout, and evidence
 
@@ -66,6 +72,14 @@ Instrument Sans is the only system family. Display styles use sentence case; res
 Use the spacing scale and responsive layout tokens: a 1200px page maximum, 680px reading measure, 12/6/4-column desktop/tablet/mobile grids, and the matching responsive edges, gutters, and section rhythm. Surfaces and evidence frames are square; controls and small tags have a 2px radius. Pills are not part of this system, and shadows are reserved for overlays.
 
 Evidence frames are intentionally flexible. They may contain product UI, research artifacts, journey maps, system diagrams, or contextual photography in 4:3 or 16:9 ratios. Give them the approved strong border and caption treatment rather than forcing all evidence into one visual format.
+
+## Responsive behavior
+
+- **Desktop — 12 columns:** two-column editorial compositions are allowed. Keep the main argument in the wider column and use the supporting column for evidence, metadata, or a secondary action.
+- **Tablet — 6 columns:** preserve the reading order; supporting content drops below the primary argument rather than becoming a cramped side column.
+- **Mobile — 4 columns:** use a one-column flow. Actions stack, navigation condenses, and evidence remains full width within the responsive edge padding.
+
+Use the three Figma reference frames as the source of truth for layout behavior. They are deliberate layout tiers, not device-specific page designs.
 
 ## Motion and accessibility
 

@@ -32,6 +32,10 @@
       "design": { "$type": "color", "$value": "#CC6F00" },
       "ship": { "$type": "color", "$value": "#F13737" }
     },
+    "focus": {
+      "parchment": { "$type": "color", "$value": "#007C86" },
+      "aubergine": { "$type": "color", "$value": "#8BCAD2" }
+    },
     "status": {
       "parchment": {
         "info": { "$type": "color", "$value": "#2E6670" },
@@ -43,7 +47,7 @@
         "info": { "$type": "color", "$value": "#8BCAD2" },
         "success": { "$type": "color", "$value": "#88D6A8" },
         "warning": { "$type": "color", "$value": "#F3B848" },
-        "danger": { "$type": "color", "$value": "#F39A9D" }
+        "danger": { "$type": "color", "$value": "#FFB6B8" }
       }
     }
   },

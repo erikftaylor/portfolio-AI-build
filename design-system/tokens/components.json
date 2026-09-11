@@ -22,17 +22,56 @@
         "foreground": { "$type": "color", "$value": "{color.action.secondary.foreground}" },
         "border": { "$type": "color", "$value": "{color.action.secondary.border}" },
         "hover": { "$type": "color", "$value": "{color.surface.subtle}" },
+        "active": { "$type": "color", "$value": "{color.surface.raised}" },
         "disabled-background": { "$type": "color", "$value": "{color.action.disabled.background}" },
         "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" }
       },
       "tertiary": {
         "background": { "$type": "color", "$value": "{color.action.secondary.background}" },
         "foreground": { "$type": "color", "$value": "{color.link.foreground}" },
-        "decoration": { "$type": "color", "$value": "{color.link.decoration}" }
+        "decoration": { "$type": "color", "$value": "{color.link.decoration}" },
+        "hover": { "$type": "color", "$value": "{color.surface.subtle}" },
+        "active": { "$type": "color", "$value": "{color.surface.raised}" },
+        "disabled-background": { "$type": "color", "$value": "{color.action.secondary.background}" },
+        "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" }
       },
       "shared": {
         "radius": { "$type": "dimension", "$value": "{radius.control}" },
         "padding-x": { "$type": "dimension", "$value": "{space.5}" },
+        "min-height": { "$type": "dimension", "$value": "{size.control.minimum}" },
+        "focus-width": { "$type": "dimension", "$value": "{border.focus}" },
+        "focus-offset": { "$type": "dimension", "$value": "{border.focus}" }
+      }
+    },
+    "link": {
+      "background": { "$type": "color", "$value": "{color.action.secondary.background}" },
+      "foreground": { "$type": "color", "$value": "{color.link.foreground}" },
+      "decoration": { "$type": "color", "$value": "{color.link.decoration}" },
+      "hover": { "$type": "color", "$value": "{color.surface.subtle}" },
+      "active": { "$type": "color", "$value": "{color.surface.raised}" },
+      "disabled-background": { "$type": "color", "$value": "{color.action.secondary.background}" },
+      "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" },
+      "shared": {
+        "min-height": { "$type": "dimension", "$value": "{size.control.minimum}" },
+        "focus-width": { "$type": "dimension", "$value": "{border.focus}" },
+        "focus-offset": { "$type": "dimension", "$value": "{border.focus}" }
+      }
+    },
+    "form-field": {
+      "background": { "$type": "color", "$value": "{color.surface.canvas}" },
+      "foreground": { "$type": "color", "$value": "{color.text.primary}" },
+      "placeholder": { "$type": "color", "$value": "{color.text.secondary}" },
+      "label": { "$type": "color", "$value": "{color.text.primary}" },
+      "helper": { "$type": "color", "$value": "{color.text.secondary}" },
+      "border": { "$type": "color", "$value": "{color.border.strong}" },
+      "hover-border": { "$type": "color", "$value": "{color.text.primary}" },
+      "focus-border": { "$type": "color", "$value": "{color.focus.ring}" },
+      "invalid-border": { "$type": "color", "$value": "{color.status.danger}" },
+      "invalid-support": { "$type": "color", "$value": "{color.status.danger}" },
+      "disabled-background": { "$type": "color", "$value": "{color.action.disabled.background}" },
+      "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" },
+      "shared": {
+        "radius": { "$type": "dimension", "$value": "{radius.control}" },
         "min-height": { "$type": "dimension", "$value": "{size.control.minimum}" },
         "focus-width": { "$type": "dimension", "$value": "{border.focus}" },
         "focus-offset": { "$type": "dimension", "$value": "{border.focus}" }
@@ -139,17 +178,56 @@
         "foreground": { "$type": "color", "$value": "{color.action.secondary.foreground}" },
         "border": { "$type": "color", "$value": "{color.action.secondary.border}" },
         "hover": { "$type": "color", "$value": "{color.surface.subtle}" },
+        "active": { "$type": "color", "$value": "{color.surface.raised}" },
         "disabled-background": { "$type": "color", "$value": "{color.action.disabled.background}" },
         "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" }
       },
       "tertiary": {
         "background": { "$type": "color", "$value": "{color.action.secondary.background}" },
         "foreground": { "$type": "color", "$value": "{color.link.foreground}" },
-        "decoration": { "$type": "color", "$value": "{color.link.decoration}" }
+        "decoration": { "$type": "color", "$value": "{color.link.decoration}" },
+        "hover": { "$type": "color", "$value": "{color.surface.subtle}" },
+        "active": { "$type": "color", "$value": "{color.surface.raised}" },
+        "disabled-background": { "$type": "color", "$value": "{color.action.secondary.background}" },
+        "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" }
       },
       "shared": {
         "radius": { "$type": "dimension", "$value": "{radius.control}" },
         "padding-x": { "$type": "dimension", "$value": "{space.5}" },
+        "min-height": { "$type": "dimension", "$value": "{size.control.minimum}" },
+        "focus-width": { "$type": "dimension", "$value": "{border.focus}" },
+        "focus-offset": { "$type": "dimension", "$value": "{border.focus}" }
+      }
+    },
+    "link": {
+      "background": { "$type": "color", "$value": "{color.action.secondary.background}" },
+      "foreground": { "$type": "color", "$value": "{color.link.foreground}" },
+      "decoration": { "$type": "color", "$value": "{color.link.decoration}" },
+      "hover": { "$type": "color", "$value": "{color.surface.subtle}" },
+      "active": { "$type": "color", "$value": "{color.surface.raised}" },
+      "disabled-background": { "$type": "color", "$value": "{color.action.secondary.background}" },
+      "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" },
+      "shared": {
+        "min-height": { "$type": "dimension", "$value": "{size.control.minimum}" },
+        "focus-width": { "$type": "dimension", "$value": "{border.focus}" },
+        "focus-offset": { "$type": "dimension", "$value": "{border.focus}" }
+      }
+    },
+    "form-field": {
+      "background": { "$type": "color", "$value": "{color.surface.canvas}" },
+      "foreground": { "$type": "color", "$value": "{color.text.primary}" },
+      "placeholder": { "$type": "color", "$value": "{color.text.secondary}" },
+      "label": { "$type": "color", "$value": "{color.text.primary}" },
+      "helper": { "$type": "color", "$value": "{color.text.secondary}" },
+      "border": { "$type": "color", "$value": "{color.border.strong}" },
+      "hover-border": { "$type": "color", "$value": "{color.text.primary}" },
+      "focus-border": { "$type": "color", "$value": "{color.focus.ring}" },
+      "invalid-border": { "$type": "color", "$value": "{color.status.danger}" },
+      "invalid-support": { "$type": "color", "$value": "{color.status.danger}" },
+      "disabled-background": { "$type": "color", "$value": "{color.action.disabled.background}" },
+      "disabled-foreground": { "$type": "color", "$value": "{color.action.disabled.foreground}" },
+      "shared": {
+        "radius": { "$type": "dimension", "$value": "{radius.control}" },
         "min-height": { "$type": "dimension", "$value": "{size.control.minimum}" },
         "focus-width": { "$type": "dimension", "$value": "{border.focus}" },
         "focus-offset": { "$type": "dimension", "$value": "{border.focus}" }

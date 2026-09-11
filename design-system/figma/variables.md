@@ -51,6 +51,8 @@ Mode: `Value`.
 | `color.signal.decide` | `color/signal/decide` | #009A46 | color |
 | `color.signal.design` | `color/signal/design` | #CC6F00 | color |
 | `color.signal.ship` | `color/signal/ship` | #F13737 | color |
+| `color.focus.parchment` | `color/focus/parchment` | #007C86 | color |
+| `color.focus.aubergine` | `color/focus/aubergine` | #8BCAD2 | color |
 | `color.status.parchment.info` | `color/status/parchment/info` | #2E6670 | color |
 | `color.status.parchment.success` | `color/status/parchment/success` | #276443 | color |
 | `color.status.parchment.warning` | `color/status/parchment/warning` | #875000 | color |
@@ -58,7 +60,7 @@ Mode: `Value`.
 | `color.status.aubergine.info` | `color/status/aubergine/info` | #8BCAD2 | color |
 | `color.status.aubergine.success` | `color/status/aubergine/success` | #88D6A8 | color |
 | `color.status.aubergine.warning` | `color/status/aubergine/warning` | #F3B848 | color |
-| `color.status.aubergine.danger` | `color/status/aubergine/danger` | #F39A9D | color |
+| `color.status.aubergine.danger` | `color/status/aubergine/danger` | #FFB6B8 | color |
 | `font.family.sans` | `font/family/sans` | Instrument Sans, system-ui, sans-serif | fontFamily |
 | `font.family.display` | `font/family/display` | {font.family.sans} | fontFamily |
 | `font.weight.regular` | `font/weight/regular` | 400 | fontWeight |
@@ -207,12 +209,12 @@ Modes: `Parchment`, `Aubergine`.
 | `parchment.color.surface.subtle` | `color/surface/subtle` | {color.paper.200} | — | color |
 | `parchment.color.text.primary` | `color/text/primary` | {color.plum.900} | — | color |
 | `parchment.color.text.secondary` | `color/text/secondary` | {color.plum.400} | — | color |
-| `parchment.color.text.tertiary` | `color/text/tertiary` | {color.plum.300} | — | color |
+| `parchment.color.text.tertiary` | `color/text/tertiary` | {color.plum.400} | — | color |
 | `parchment.color.border.subtle` | `color/border/subtle` | {color.paper.400} | — | color |
 | `parchment.color.border.strong` | `color/border/strong` | {color.plum.300} | — | color |
 | `parchment.color.link.foreground` | `color/link/foreground` | {color.text.primary} | — | color |
 | `parchment.color.link.decoration` | `color/link/decoration` | {color.text.primary} | — | color |
-| `parchment.color.focus.ring` | `color/focus/ring` | {color.signal.research} | — | color |
+| `parchment.color.focus.ring` | `color/focus/ring` | {color.focus.parchment} | — | color |
 | `parchment.color.action.primary.background` | `color/action/primary/background` | {color.plum.700} | — | color |
 | `parchment.color.action.primary.foreground` | `color/action/primary/foreground` | {color.paper.100} | — | color |
 | `parchment.color.action.primary.hover` | `color/action/primary/hover` | {color.plum.900} | — | color |
@@ -233,12 +235,12 @@ Modes: `Parchment`, `Aubergine`.
 | `aubergine.color.surface.subtle` | `color/surface/subtle` | — | {color.plum.500} | color |
 | `aubergine.color.text.primary` | `color/text/primary` | — | {color.paper.100} | color |
 | `aubergine.color.text.secondary` | `color/text/secondary` | — | {color.inverse.secondary} | color |
-| `aubergine.color.text.tertiary` | `color/text/tertiary` | — | {color.inverse.tertiary} | color |
+| `aubergine.color.text.tertiary` | `color/text/tertiary` | — | {color.inverse.secondary} | color |
 | `aubergine.color.border.subtle` | `color/border/subtle` | — | {color.inverse.border} | color |
 | `aubergine.color.border.strong` | `color/border/strong` | — | {color.inverse.secondary} | color |
 | `aubergine.color.link.foreground` | `color/link/foreground` | — | {color.text.primary} | color |
 | `aubergine.color.link.decoration` | `color/link/decoration` | — | {color.text.primary} | color |
-| `aubergine.color.focus.ring` | `color/focus/ring` | — | {color.signal.research} | color |
+| `aubergine.color.focus.ring` | `color/focus/ring` | — | {color.focus.aubergine} | color |
 | `aubergine.color.action.primary.background` | `color/action/primary/background` | — | {color.paper.100} | color |
 | `aubergine.color.action.primary.foreground` | `color/action/primary/foreground` | — | {color.plum.900} | color |
 | `aubergine.color.action.primary.hover` | `color/action/primary/hover` | — | {color.paper.50} | color |
@@ -277,16 +279,47 @@ Modes: `Parchment`, `Aubergine`.
 | `parchment.button.secondary.foreground` | `button/secondary/foreground` | {color.action.secondary.foreground} | — | color |
 | `parchment.button.secondary.border` | `button/secondary/border` | {color.action.secondary.border} | — | color |
 | `parchment.button.secondary.hover` | `button/secondary/hover` | {color.surface.subtle} | — | color |
+| `parchment.button.secondary.active` | `button/secondary/active` | {color.surface.raised} | — | color |
 | `parchment.button.secondary.disabled-background` | `button/secondary/disabled-background` | {color.action.disabled.background} | — | color |
 | `parchment.button.secondary.disabled-foreground` | `button/secondary/disabled-foreground` | {color.action.disabled.foreground} | — | color |
 | `parchment.button.tertiary.background` | `button/tertiary/background` | {color.action.secondary.background} | — | color |
 | `parchment.button.tertiary.foreground` | `button/tertiary/foreground` | {color.link.foreground} | — | color |
 | `parchment.button.tertiary.decoration` | `button/tertiary/decoration` | {color.link.decoration} | — | color |
+| `parchment.button.tertiary.hover` | `button/tertiary/hover` | {color.surface.subtle} | — | color |
+| `parchment.button.tertiary.active` | `button/tertiary/active` | {color.surface.raised} | — | color |
+| `parchment.button.tertiary.disabled-background` | `button/tertiary/disabled-background` | {color.action.secondary.background} | — | color |
+| `parchment.button.tertiary.disabled-foreground` | `button/tertiary/disabled-foreground` | {color.action.disabled.foreground} | — | color |
 | `parchment.button.shared.radius` | `button/shared/radius` | {radius.control} | — | dimension |
 | `parchment.button.shared.padding-x` | `button/shared/padding-x` | {space.5} | — | dimension |
 | `parchment.button.shared.min-height` | `button/shared/min-height` | {size.control.minimum} | — | dimension |
 | `parchment.button.shared.focus-width` | `button/shared/focus-width` | {border.focus} | — | dimension |
 | `parchment.button.shared.focus-offset` | `button/shared/focus-offset` | {border.focus} | — | dimension |
+| `parchment.link.background` | `link/background` | {color.action.secondary.background} | — | color |
+| `parchment.link.foreground` | `link/foreground` | {color.link.foreground} | — | color |
+| `parchment.link.decoration` | `link/decoration` | {color.link.decoration} | — | color |
+| `parchment.link.hover` | `link/hover` | {color.surface.subtle} | — | color |
+| `parchment.link.active` | `link/active` | {color.surface.raised} | — | color |
+| `parchment.link.disabled-background` | `link/disabled-background` | {color.action.secondary.background} | — | color |
+| `parchment.link.disabled-foreground` | `link/disabled-foreground` | {color.action.disabled.foreground} | — | color |
+| `parchment.link.shared.min-height` | `link/shared/min-height` | {size.control.minimum} | — | dimension |
+| `parchment.link.shared.focus-width` | `link/shared/focus-width` | {border.focus} | — | dimension |
+| `parchment.link.shared.focus-offset` | `link/shared/focus-offset` | {border.focus} | — | dimension |
+| `parchment.form-field.background` | `form-field/background` | {color.surface.canvas} | — | color |
+| `parchment.form-field.foreground` | `form-field/foreground` | {color.text.primary} | — | color |
+| `parchment.form-field.placeholder` | `form-field/placeholder` | {color.text.secondary} | — | color |
+| `parchment.form-field.label` | `form-field/label` | {color.text.primary} | — | color |
+| `parchment.form-field.helper` | `form-field/helper` | {color.text.secondary} | — | color |
+| `parchment.form-field.border` | `form-field/border` | {color.border.strong} | — | color |
+| `parchment.form-field.hover-border` | `form-field/hover-border` | {color.text.primary} | — | color |
+| `parchment.form-field.focus-border` | `form-field/focus-border` | {color.focus.ring} | — | color |
+| `parchment.form-field.invalid-border` | `form-field/invalid-border` | {color.status.danger} | — | color |
+| `parchment.form-field.invalid-support` | `form-field/invalid-support` | {color.status.danger} | — | color |
+| `parchment.form-field.disabled-background` | `form-field/disabled-background` | {color.action.disabled.background} | — | color |
+| `parchment.form-field.disabled-foreground` | `form-field/disabled-foreground` | {color.action.disabled.foreground} | — | color |
+| `parchment.form-field.shared.radius` | `form-field/shared/radius` | {radius.control} | — | dimension |
+| `parchment.form-field.shared.min-height` | `form-field/shared/min-height` | {size.control.minimum} | — | dimension |
+| `parchment.form-field.shared.focus-width` | `form-field/shared/focus-width` | {border.focus} | — | dimension |
+| `parchment.form-field.shared.focus-offset` | `form-field/shared/focus-offset` | {border.focus} | — | dimension |
 | `parchment.hero.background` | `hero/background` | {color.surface.canvas} | — | color |
 | `parchment.hero.foreground` | `hero/foreground` | {color.text.primary} | — | color |
 | `parchment.hero.headline.max-width` | `hero/headline/max-width` | {layout.reading.max} | — | dimension |
@@ -352,16 +385,47 @@ Modes: `Parchment`, `Aubergine`.
 | `aubergine.button.secondary.foreground` | `button/secondary/foreground` | — | {color.action.secondary.foreground} | color |
 | `aubergine.button.secondary.border` | `button/secondary/border` | — | {color.action.secondary.border} | color |
 | `aubergine.button.secondary.hover` | `button/secondary/hover` | — | {color.surface.subtle} | color |
+| `aubergine.button.secondary.active` | `button/secondary/active` | — | {color.surface.raised} | color |
 | `aubergine.button.secondary.disabled-background` | `button/secondary/disabled-background` | — | {color.action.disabled.background} | color |
 | `aubergine.button.secondary.disabled-foreground` | `button/secondary/disabled-foreground` | — | {color.action.disabled.foreground} | color |
 | `aubergine.button.tertiary.background` | `button/tertiary/background` | — | {color.action.secondary.background} | color |
 | `aubergine.button.tertiary.foreground` | `button/tertiary/foreground` | — | {color.link.foreground} | color |
 | `aubergine.button.tertiary.decoration` | `button/tertiary/decoration` | — | {color.link.decoration} | color |
+| `aubergine.button.tertiary.hover` | `button/tertiary/hover` | — | {color.surface.subtle} | color |
+| `aubergine.button.tertiary.active` | `button/tertiary/active` | — | {color.surface.raised} | color |
+| `aubergine.button.tertiary.disabled-background` | `button/tertiary/disabled-background` | — | {color.action.secondary.background} | color |
+| `aubergine.button.tertiary.disabled-foreground` | `button/tertiary/disabled-foreground` | — | {color.action.disabled.foreground} | color |
 | `aubergine.button.shared.radius` | `button/shared/radius` | — | {radius.control} | dimension |
 | `aubergine.button.shared.padding-x` | `button/shared/padding-x` | — | {space.5} | dimension |
 | `aubergine.button.shared.min-height` | `button/shared/min-height` | — | {size.control.minimum} | dimension |
 | `aubergine.button.shared.focus-width` | `button/shared/focus-width` | — | {border.focus} | dimension |
 | `aubergine.button.shared.focus-offset` | `button/shared/focus-offset` | — | {border.focus} | dimension |
+| `aubergine.link.background` | `link/background` | — | {color.action.secondary.background} | color |
+| `aubergine.link.foreground` | `link/foreground` | — | {color.link.foreground} | color |
+| `aubergine.link.decoration` | `link/decoration` | — | {color.link.decoration} | color |
+| `aubergine.link.hover` | `link/hover` | — | {color.surface.subtle} | color |
+| `aubergine.link.active` | `link/active` | — | {color.surface.raised} | color |
+| `aubergine.link.disabled-background` | `link/disabled-background` | — | {color.action.secondary.background} | color |
+| `aubergine.link.disabled-foreground` | `link/disabled-foreground` | — | {color.action.disabled.foreground} | color |
+| `aubergine.link.shared.min-height` | `link/shared/min-height` | — | {size.control.minimum} | dimension |
+| `aubergine.link.shared.focus-width` | `link/shared/focus-width` | — | {border.focus} | dimension |
+| `aubergine.link.shared.focus-offset` | `link/shared/focus-offset` | — | {border.focus} | dimension |
+| `aubergine.form-field.background` | `form-field/background` | — | {color.surface.canvas} | color |
+| `aubergine.form-field.foreground` | `form-field/foreground` | — | {color.text.primary} | color |
+| `aubergine.form-field.placeholder` | `form-field/placeholder` | — | {color.text.secondary} | color |
+| `aubergine.form-field.label` | `form-field/label` | — | {color.text.primary} | color |
+| `aubergine.form-field.helper` | `form-field/helper` | — | {color.text.secondary} | color |
+| `aubergine.form-field.border` | `form-field/border` | — | {color.border.strong} | color |
+| `aubergine.form-field.hover-border` | `form-field/hover-border` | — | {color.text.primary} | color |
+| `aubergine.form-field.focus-border` | `form-field/focus-border` | — | {color.focus.ring} | color |
+| `aubergine.form-field.invalid-border` | `form-field/invalid-border` | — | {color.status.danger} | color |
+| `aubergine.form-field.invalid-support` | `form-field/invalid-support` | — | {color.status.danger} | color |
+| `aubergine.form-field.disabled-background` | `form-field/disabled-background` | — | {color.action.disabled.background} | color |
+| `aubergine.form-field.disabled-foreground` | `form-field/disabled-foreground` | — | {color.action.disabled.foreground} | color |
+| `aubergine.form-field.shared.radius` | `form-field/shared/radius` | — | {radius.control} | dimension |
+| `aubergine.form-field.shared.min-height` | `form-field/shared/min-height` | — | {size.control.minimum} | dimension |
+| `aubergine.form-field.shared.focus-width` | `form-field/shared/focus-width` | — | {border.focus} | dimension |
+| `aubergine.form-field.shared.focus-offset` | `form-field/shared/focus-offset` | — | {border.focus} | dimension |
 | `aubergine.hero.background` | `hero/background` | — | {color.surface.canvas} | color |
 | `aubergine.hero.foreground` | `hero/foreground` | — | {color.text.primary} | color |
 | `aubergine.hero.headline.max-width` | `hero/headline/max-width` | — | {layout.reading.max} | dimension |

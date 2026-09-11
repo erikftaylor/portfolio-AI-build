@@ -141,6 +141,22 @@ test('approved semantic pairings meet their contrast thresholds', () => {
   assert.ok(contrastRatio(resolved('aubergine', 'color.focus.ring'), resolved('aubergine', 'color.surface.canvas')) >= 3);
 });
 
+test('semantic text, status, and focus roles remain accessible on every approved surface', () => {
+  const bundle = loadTokenBundle(projectRoot);
+  const registry = createRegistry(bundle);
+  const resolved = (mode, tokenPath) =>
+    resolveValue(registry.get(`${mode}.${tokenPath}`).$value, registry, [mode]);
+
+  for (const mode of ['parchment', 'aubergine']) {
+    for (const surface of ['canvas', 'raised', 'subtle']) {
+      const background = resolved(mode, `color.surface.${surface}`);
+      assert.ok(contrastRatio(resolved(mode, 'color.focus.ring'), background) >= 3, `${mode} focus on ${surface}`);
+      assert.ok(contrastRatio(resolved(mode, 'color.text.tertiary'), background) >= 4.5, `${mode} tertiary text on ${surface}`);
+      assert.ok(contrastRatio(resolved(mode, 'color.status.danger'), background) >= 4.5, `${mode} danger on ${surface}`);
+    }
+  }
+});
+
 test('status and Direction Band colors meet their intended-use contrast thresholds', () => {
   const bundle = loadTokenBundle(projectRoot);
   const registry = createRegistry(bundle);
@@ -169,6 +185,70 @@ test('component modes expose identical paths', () => {
   assert.ok(parchment.includes('button.primary.background'));
   assert.ok(parchment.includes('case-card.featured.background'));
   assert.ok(parchment.includes('direction-band.research.color'));
+});
+
+test('every button emphasis exposes a complete interaction-state contract', () => {
+  const { components } = loadTokenBundle(projectRoot);
+  const requiredStates = [
+    'background',
+    'foreground',
+    'hover',
+    'active',
+    'disabled-background',
+    'disabled-foreground',
+  ];
+
+  for (const mode of ['parchment', 'aubergine']) {
+    const tokens = flattenTokens(components[mode]);
+    for (const style of ['primary', 'secondary', 'tertiary']) {
+      for (const state of requiredStates) {
+        assert.ok(tokens.has(`button.${style}.${state}`), `${mode} ${style} needs ${state}`);
+      }
+    }
+
+    assert.ok(tokens.has('button.shared.focus-width'), `${mode} needs focus width`);
+    assert.ok(tokens.has('button.shared.focus-offset'), `${mode} needs focus offset`);
+  }
+});
+
+test('link and form-field components expose accessible interaction contracts', () => {
+  const { components } = loadTokenBundle(projectRoot);
+  const linkStates = [
+    'background',
+    'foreground',
+    'decoration',
+    'hover',
+    'active',
+    'disabled-background',
+    'disabled-foreground',
+    'shared.min-height',
+    'shared.focus-width',
+    'shared.focus-offset',
+  ];
+  const formFieldStates = [
+    'background',
+    'foreground',
+    'placeholder',
+    'label',
+    'helper',
+    'border',
+    'hover-border',
+    'focus-border',
+    'invalid-border',
+    'invalid-support',
+    'disabled-background',
+    'disabled-foreground',
+    'shared.radius',
+    'shared.min-height',
+    'shared.focus-width',
+    'shared.focus-offset',
+  ];
+
+  for (const mode of ['parchment', 'aubergine']) {
+    const tokens = flattenTokens(components[mode]);
+    for (const state of linkStates) assert.ok(tokens.has(`link.${state}`), `${mode} link needs ${state}`);
+    for (const state of formFieldStates) assert.ok(tokens.has(`form-field.${state}`), `${mode} form field needs ${state}`);
+  }
 });
 
 test('all aliases resolve and Direction Band colors stay out of UI semantics', () => {
@@ -440,7 +520,24 @@ test('README documents both surface modes and the Direction Band boundary', () =
   assert.match(readme, /data-et-surface="aubergine"/);
   assert.match(readme, /Direction Band/);
   assert.match(readme, /not.*button/i);
-  assert.match(readme, /Research Cyan/);
+  assert.match(readme, /mode-specific cyan tokens/);
   assert.match(readme, /Figma/);
   assert.match(readme, /npm run tokens:check/);
+});
+
+test('README defines the approved responsive behavior at every layout tier', () => {
+  const readme = fs.readFileSync(path.join(projectRoot, 'design-system/README.md'), 'utf8');
+
+  assert.match(readme, /## Responsive behavior/);
+  assert.match(readme, /Desktop.*12 columns.*two-column/i);
+  assert.match(readme, /Tablet.*6 columns.*drops below/i);
+  assert.match(readme, /Mobile.*4 columns.*one-column.*actions stack.*navigation condenses/i);
+});
+
+test('README documents Link and Form Field usage', () => {
+  const readme = fs.readFileSync(path.join(projectRoot, 'design-system/README.md'), 'utf8');
+
+  assert.match(readme, /## Links and form fields/);
+  assert.match(readme, /Link.*44px target/i);
+  assert.match(readme, /Form Field.*visible label.*specific error/i);
 });
