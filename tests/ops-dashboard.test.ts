@@ -1,7 +1,7 @@
 /**
  * Ops Dashboard API test suite.
  * Tests all 7 API endpoints: auth, stats, traces, trace detail, evals, prompts, rag-stats.
- * Requires `vercel dev` running on localhost:3000.
+ * Requires `wrangler dev` running on the configured base URL.
  *
  * Usage: npm run test:ops
  */
@@ -11,6 +11,7 @@ config({ path: '.env.local' })
 
 const BASE_URL = process.env.OPS_TEST_BASE_URL || 'http://localhost:3000'
 const SECRET = process.env.OPS_DASHBOARD_SECRET || 'test-ops-secret-123'
+let sessionCookie = ''
 
 // ---------------------------------------------------------------------------
 // Test runner
@@ -29,12 +30,13 @@ async function fetchApi(path: string, options: RequestInit = {}): Promise<Respon
 }
 
 async function fetchAuthed(path: string, params?: Record<string, string>): Promise<Response> {
+  if (!sessionCookie) throw new Error('Ops session has not been established')
   const url = new URL(`${BASE_URL}${path}`)
   if (params) {
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
   }
   return fetch(url.toString(), {
-    headers: { Authorization: `Bearer ${SECRET}` },
+    headers: { Cookie: sessionCookie },
   })
 }
 
@@ -63,9 +65,9 @@ async function checkServerRunning(): Promise<boolean> {
 async function testAuth() {
   console.log('\n--- AUTH (/api/ops/auth) ---')
 
-  // POST required
+  // Session status without a cookie
   const getRes = await fetchApi('/api/ops/auth', { method: 'GET' })
-  assert(getRes.status === 405, 'GET returns 405')
+  assert(getRes.status === 401, 'GET without a session returns 401')
 
   // Wrong password
   const wrongRes = await fetchApi('/api/ops/auth', {
@@ -90,9 +92,18 @@ async function testAuth() {
     body: JSON.stringify({ password: SECRET }),
   })
   assert(okRes.status === 200, 'Correct password returns 200')
-  const okBody = await okRes.json() as { ok: boolean; token: string }
+  const okBody = await okRes.json() as { ok: boolean; token?: unknown }
   assert(okBody.ok === true, 'Response has ok: true')
-  assert(typeof okBody.token === 'string', 'Response has token string')
+  assert(!('token' in okBody), 'Response does not expose a browser-readable token')
+
+  const setCookie = okRes.headers.get('set-cookie') || ''
+  assert(setCookie.includes('ops_session='), 'Response sets an ops session cookie')
+  assert(setCookie.includes('HttpOnly'), 'Session cookie is HttpOnly')
+  assert(setCookie.includes('SameSite=Strict'), 'Session cookie is SameSite=Strict')
+  sessionCookie = setCookie.split(';', 1)[0]
+
+  const statusRes = await fetchAuthed('/api/ops/auth')
+  assert(statusRes.status === 200, 'GET with a valid session returns 200')
 
   // Invalid JSON body
   const badRes = await fetchApi('/api/ops/auth', {
@@ -115,16 +126,30 @@ async function testAuthProtection() {
   ]
 
   for (const endpoint of protectedEndpoints) {
-    // No auth header
+    // No session cookie
     const noAuth = await fetchApi(endpoint)
-    assert(noAuth.status === 401, `${endpoint} without token returns 401`)
+    assert(noAuth.status === 401, `${endpoint} without a session returns 401`)
 
-    // Wrong token
+    // Invalid signed session
     const wrongAuth = await fetchApi(endpoint, {
-      headers: { Authorization: 'Bearer wrong-token' },
+      headers: { Cookie: 'ops_session=invalid-session' },
     })
-    assert(wrongAuth.status === 401, `${endpoint} with wrong token returns 401`)
+    assert(wrongAuth.status === 401, `${endpoint} with an invalid session returns 401`)
   }
+}
+
+async function testLogout() {
+  console.log('\n--- LOGOUT (/api/ops/auth) ---')
+
+  const res = await fetchAuthed('/api/ops/auth')
+  assert(res.status === 200, 'Session is valid before logout')
+
+  const logoutRes = await fetchApi('/api/ops/auth', {
+    method: 'DELETE',
+    headers: { Cookie: sessionCookie },
+  })
+  assert(logoutRes.status === 200, 'DELETE returns 200')
+  assert((logoutRes.headers.get('set-cookie') || '').includes('Max-Age=0'), 'DELETE expires the session cookie')
 }
 
 async function testStats() {
@@ -343,13 +368,13 @@ async function testRagStats() {
 async function main() {
   console.log('\n=== Ops Dashboard API Tests ===')
   console.log(`Base URL: ${BASE_URL}`)
-  console.log(`Secret: ${SECRET.slice(0, 4)}...\n`)
+  console.log('Authentication: signed cookie session\n')
 
   // Check server is running
   const running = await checkServerRunning()
   if (!running) {
-    console.error('Cannot connect to server. Start vercel dev first:')
-    console.error(`  cd ${process.cwd()} && vercel dev`)
+    console.error('Cannot connect to server. Start the Worker locally first:')
+    console.error(`  cd ${process.cwd()} && npm run worker:dev`)
     process.exit(1)
   }
 
@@ -361,6 +386,7 @@ async function main() {
   await testEvals()
   await testPrompts()
   await testRagStats()
+  await testLogout()
 
   console.log(`\n${'='.repeat(50)}`)
   console.log(`Passed: ${passed}  Failed: ${failed}`)

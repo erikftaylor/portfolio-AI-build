@@ -2,7 +2,7 @@ import { validateOpsAuth, langfuseAuth, langfuseBaseUrl } from '../_shared/ops-a
 import evalResults from './_eval-results.js'
 
 export default async function handler(req) {
-  const auth = validateOpsAuth(req)
+  const auth = await validateOpsAuth(req)
   if (!auth.ok) return auth.response
 
   try {

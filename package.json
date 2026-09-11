@@ -27,6 +27,7 @@
     "chats:tui": "npx tsx scripts/chats-tui.ts",
     "test:contract": "npx tsx tests/ops-contract.test.ts",
     "test:ops": "npx tsx tests/ops-dashboard.test.ts",
+    "test:p0": "node --test tests/p0-*.test.mjs",
     "diagnose:rag": "npx tsx scripts/diagnose-rag.ts",
     "palette:contrast": "npx tsx scripts/check-palette-contrast.ts",
     "identity:check": "npx tsx scripts/identity-check.ts",

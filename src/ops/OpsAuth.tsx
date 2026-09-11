@@ -1,5 +1,6 @@
 import { site } from '../site.config'
 import { useState, useEffect, type FormEvent } from 'react'
+import { loginOps } from './auth-client.js'
 
 interface OpsAuthProps {
   onAuth: () => void
@@ -47,19 +48,9 @@ export default function OpsAuth({ onAuth }: OpsAuthProps) {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/ops/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        throw new Error(body.error ?? 'Authentication failed')
-      }
-
-      const { token } = await res.json()
-      sessionStorage.setItem('ops_token', token)
+      const { ok } = await loginOps(password)
+      if (!ok) throw new Error('Authentication failed')
+      setPassword('')
       onAuth()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed')

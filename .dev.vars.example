@@ -1,0 +1,22 @@
+# Copy to `.dev.vars` for local Wrangler development. Never commit real values.
+
+# Keep paid AI endpoints disabled unless you are intentionally testing them.
+AI_FEATURES_ENABLED=false
+
+# Use two different random values of at least 32 characters.
+RATE_LIMIT_SALT=replace-with-a-random-secret-at-least-32-characters
+OPS_SESSION_SECRET=replace-with-a-different-random-secret-at-least-32-characters
+
+# Password entered on the local /ops screen.
+OPS_DASHBOARD_SECRET=replace-with-a-strong-dashboard-password
+
+# Optional external services. P0 tests do not require any of them.
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+LANGFUSE_PUBLIC_KEY=
+LANGFUSE_SECRET_KEY=
+LANGFUSE_BASE_URL=
+RESEND_API_KEY=
+ALERT_EMAIL=

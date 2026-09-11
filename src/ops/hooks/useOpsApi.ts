@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import type { UseOpsApiOptions, UseOpsApiResult } from '../types'
-
-const OPS_TOKEN_KEY = 'ops_token'
+import { fetchOps } from '../auth-client.js'
 
 function buildCacheKey(endpoint: string, params?: Record<string, string>): string {
   const paramStr = params ? JSON.stringify(params, Object.keys(params).sort()) : ''
@@ -47,9 +46,6 @@ export function useOpsApi<T>(options: UseOpsApiOptions): UseOpsApiResult<T> {
   const stableParams = paramsRef.current
 
   const fetchData = useCallback(async () => {
-    const token = sessionStorage.getItem(OPS_TOKEN_KEY)
-    if (!token) return
-
     const cacheKey = buildCacheKey(endpoint, stableParams)
     const cached = getCached<T>(cacheKey, cacheTtlMs)
     if (cached) {
@@ -70,13 +66,12 @@ export function useOpsApi<T>(options: UseOpsApiOptions): UseOpsApiResult<T> {
         Object.entries(stableParams).forEach(([k, v]) => url.searchParams.set(k, v))
       }
 
-      const res = await fetch(url.toString(), {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await fetchOps(url.toString(), {
+        headers: { Accept: 'application/json' },
         signal: controller.signal,
       })
 
       if (res.status === 401) {
-        sessionStorage.removeItem(OPS_TOKEN_KEY)
         window.location.reload()
         return
       }

@@ -1,36 +1,51 @@
-export default async function handler(req) {
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    })
+import {
+  constantTimeEqual,
+  createOpsSession,
+  expiredSessionCookie,
+  sessionCookie,
+  validateOpsAuth,
+} from '../_shared/ops-auth.js'
+
+export default async function handler(request) {
+  if (request.method === 'GET') {
+    const auth = await validateOpsAuth(request)
+    return auth.ok ? json({ ok: true }) : auth.response
+  }
+
+  if (request.method === 'DELETE') {
+    const response = json({ ok: true })
+    response.headers.set('Set-Cookie', expiredSessionCookie(request))
+    return response
+  }
+
+  if (request.method !== 'POST') {
+    return json({ error: 'method_not_allowed' }, 405, { Allow: 'GET, POST, DELETE' })
+  }
+
+  const dashboardSecret = process.env.OPS_DASHBOARD_SECRET
+  const sessionSecret = process.env.OPS_SESSION_SECRET
+  if (!dashboardSecret || !sessionSecret || new TextEncoder().encode(sessionSecret).length < 32) {
+    return json({ error: 'security_unavailable' }, 503)
   }
 
   try {
-    const { password } = await req.json()
-    const secret = process.env.OPS_DASHBOARD_SECRET
-
-    if (!secret) {
-      return new Response(JSON.stringify({ error: 'Dashboard not configured' }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' },
-      })
+    const { password } = await request.json()
+    if (typeof password !== 'string' || !constantTimeEqual(password, dashboardSecret)) {
+      return json({ error: 'invalid_credentials' }, 401)
     }
 
-    if (!password || password !== secret) {
-      return new Response(JSON.stringify({ error: 'Invalid password' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      })
-    }
-
-    return new Response(JSON.stringify({ ok: true, token: password }), {
-      headers: { 'Content-Type': 'application/json' },
-    })
+    const token = await createOpsSession(sessionSecret)
+    const response = json({ ok: true })
+    response.headers.set('Set-Cookie', sessionCookie(token, request))
+    return response
   } catch {
-    return new Response(JSON.stringify({ error: 'Invalid request body' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return json({ error: 'invalid_request' }, 400)
   }
+}
+
+function json(data, status = 200, extraHeaders = {}) {
+  return Response.json(data, {
+    status,
+    headers: { 'Cache-Control': 'no-store', ...extraHeaders },
+  })
 }

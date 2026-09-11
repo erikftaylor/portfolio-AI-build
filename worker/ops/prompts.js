@@ -1,7 +1,7 @@
 import { validateOpsAuth, langfuseAuth, langfuseBaseUrl } from '../_shared/ops-auth.js'
 
 export default async function handler(req) {
-  const auth = validateOpsAuth(req)
+  const auth = await validateOpsAuth(req)
   if (!auth.ok) return auth.response
 
   try {
